@@ -8,3 +8,5 @@
 
 1. Download/clone project
 
+ng serve --o
+
