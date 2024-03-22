@@ -1,0 +1,12 @@
+{
+	"editor.formatOnSave": true,
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "vscode.typescript-language-features"
+	},
+	"editor.tabSize": 3,
+	"editor.indentSize": "tabSize",
+	"eslint.format.enable": true
+}
