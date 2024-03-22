@@ -1,0 +1,46 @@
+.Logo {
+	aspect-ratio: 1 / 1;
+	background-image: url(assets/pictures/EzDealLogo.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 80%;
+	min-width: 50px;
+}
+
+#siteNavbar {
+	font-size: 20px;
+	max-width: 100%;
+	padding-left: var(--padingLeft);
+	padding-right: var(--padingRight);
+	background-color: var(--background-color-4);
+}
+
+#siteNavbar a.navbar-brand {
+	padding: 0px;
+}
+
+#siteNavbar a {
+	color: var(--NavbarFooterTextColor);
+}
+#siteNavbar div .input-group-append button {
+	border-color: var(--background-color-2) !important;
+}
+#siteNavbar button.navbar-toggler span.navbar-toggler-icon {
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+
+#siteNavbar button.navbar-toggler {
+	border-color: var(--NavbarFooterTextColor);
+}
+
+.input-group {
+	margin: auto;
+}
+
+@media only screen and (max-width: 992px) {
+	#siteNavbar {
+		padding-left: var(--BreakpointPadingLeft);
+		padding-right: var(--BreakpointPadingRight);
+	}
+}
