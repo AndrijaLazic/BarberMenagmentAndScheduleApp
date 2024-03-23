@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
 	providedIn: 'root',
 })
 export class WeatherForecastService {
-	constructor(private http: HttpClient) {}
+	constructor (private http: HttpClient) {}
 
-	getData():Observable<any> {
+	getData ():Observable<any> {
 		return this.http.get('https://localhost:7278/WeatherForecast');
 	}
 }

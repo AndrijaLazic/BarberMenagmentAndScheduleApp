@@ -4,7 +4,7 @@ import { WeatherForecastService } from '../../shared/services/weather-forecast.s
 @Component({
 	selector: 'app-main-page',
 	templateUrl: './main-page.component.html',
-	styleUrls: ['./main-page.component.css'],
+	styleUrls: [ './main-page.component.css' ],
 })
 export class MainPageComponent {
 	// ngOnInit(): void {
@@ -13,5 +13,5 @@ export class MainPageComponent {
 	// 	});
 	// }
 
-	constructor(private service: WeatherForecastService) { }
+	constructor (private service: WeatherForecastService) { }
 }
