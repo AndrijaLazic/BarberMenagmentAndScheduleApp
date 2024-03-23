@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace BackendAPI.Controllers
 {
@@ -12,22 +13,18 @@ namespace BackendAPI.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly AppConfiguration _appConfiguration;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,IOptions<AppConfiguration> options)
         {
             _logger = logger;
+            _appConfiguration = options.Value;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public IActionResult Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return Ok(_appConfiguration);
         }
     }
 }
