@@ -5,11 +5,13 @@
 	--background-color-2: #163172;
 	--background-color-3: #f2f2f2;
 	--background-color-4: #212529;
+	--background-color-5: #3c3d3e;
+
 	--navbar-text-color: #f9f9f9;
 	--navbar-icon-color: #f9f9f9;
 
-	--padingLeft: 15%;
-	--padingRight: 15%;
+	--padingLeft: 17%;
+	--padingRight: 17%;
 	--BreakpointPadingLeft: 5%;
 	--BreakpointPadingRight: 5%;
 
