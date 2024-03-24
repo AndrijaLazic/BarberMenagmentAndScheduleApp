@@ -1,0 +1,8 @@
+.registerBlock {
+   text-align: start;
+   border: 1px dotted var(--background-color-5) !important;
+}
+
+.registerBlock button {
+   text-align: center;
+}
