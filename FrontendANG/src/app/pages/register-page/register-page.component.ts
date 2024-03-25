@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 import { RegisterDTS } from 'src/app/shared/models/RegisterDTS';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
@@ -30,7 +31,7 @@ export class RegisterPageComponent{
 	};
 
 	constructor (
-private formBuilder: FormBuilder, private service: AuthService, private router: Router
+private formBuilder: FormBuilder, private service: AuthService, private router: Router, private toast: NgToastService
 	) {
 		this.myForm = this.formBuilder.group({
 			name:  [ this.registerdts.name, [ Validators.required, Validators.pattern('.{8,20}') ] ],
@@ -39,14 +40,20 @@ private formBuilder: FormBuilder, private service: AuthService, private router: 
 			phoneNumber: [ this.registerdts.phoneNumber, [ Validators.required, Validators.pattern('\\d{10}') ] ]
 		});
 	}
+	showError (message: string) {
+		this.toast.error({detail:"ERROR", summary: message, sticky:true});
+	}
 
+	showSuccess (message: string) {
+		this.toast.success({detail:"SUCCESS", summary: message, duration: 5000});
+	}
 
 
 	onSubmit (){
 		this.service.register(this.myForm.value).subscribe({
-			error: () => {alert("Doslo je do greske.");},
+			error: () => {this.showError("Doslo je do greske.");},
 			complete: () => {
-				alert("Uspesna registracija.");
+				this.showSuccess("Uspesna registracija!");
 				this.router.navigate([ "/" ]);
 			}
 		});

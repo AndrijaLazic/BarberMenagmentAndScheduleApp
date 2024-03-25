@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { MainPageComponent } from './pages/main-page/main-page.component';
 import { NavigationBarComponent } from './shared/components/navigation-bar/navigation-bar.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { NgToastModule } from "ng-angular-popup";
 
 @NgModule({
 	declarations: [ AppComponent, MainPageComponent ],
@@ -14,7 +15,8 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 		AppRoutingModule,
 		HttpClientModule,
 		NavigationBarComponent,
-		FooterComponent
+		FooterComponent,
+		NgToastModule
 	],
 	providers: [],
 	bootstrap: [ AppComponent ],
