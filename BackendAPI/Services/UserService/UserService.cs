@@ -78,7 +78,7 @@ namespace BackendAPI.Services.UserService
             {
                 new Claim("PhoneNumber",user.PhoneNumber),
                 new Claim("Email",user.Email),
-                new Claim("Email",user.Name)
+                new Claim("Name",user.Name)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

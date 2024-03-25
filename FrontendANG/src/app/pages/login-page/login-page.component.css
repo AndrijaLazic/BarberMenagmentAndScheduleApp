@@ -1,0 +1,23 @@
+.loginBlock div {
+   text-align: start;
+}
+
+.loginBlock {
+   border: 1px dotted var(--background-color-5) !important;
+   background-color: var(--background-color-4) !important;
+   color: var(--text-color-1) !important;
+}
+
+.loginBlock small {
+   color: var(--text-color-1);
+}
+
+.loginBlock button {
+   background-color: var(--background-color-5) !important;
+   color: var(--text-color-1);
+   text-align: center !important;
+}
+
+.loginBlock .errorMessage {
+   color: var(--text-error-color-1);
+}

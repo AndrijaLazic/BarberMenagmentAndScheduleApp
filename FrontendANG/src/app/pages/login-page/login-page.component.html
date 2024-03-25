@@ -1,0 +1,23 @@
+<div class="h-100 d-flex align-items-center justify-content-center">
+   <div class="border rounded loginBlock">
+       <form class="p-4" [formGroup]="myForm" (ngSubmit)="onSubmit()">
+           <div class="mb-3">
+               <label for="emailInput" class="form-label">Email adresa</label>
+               <input type="email" formControlName="email" class="form-control" id="emailInput" placeholder="pera@gmail.com" required>
+               <div class="errorMessage" *ngIf="myForm.controls['email'].invalid && (myForm.controls['email'].dirty || myForm.controls['email'].touched)">
+                   <div *ngIf="myForm.controls['email'].errors?.['required']">Unesite email</div>
+                   <div *ngIf="myForm.controls['email'].errors?.['pattern']">Email format nije dozovljen</div>
+               </div>
+           </div>
+           <div class="mb-3">
+               <label for="passwordInput" class="form-label">Lozinka</label>
+               <input type="password" formControlName="password" class="form-control" id="passwordInput" placeholder="********" aria-describedby="passwordSmall" required>
+               <div class="errorMessage" *ngIf="myForm.controls['password'].invalid && (myForm.controls['password'].dirty || myForm.controls['password'].touched)">
+                   <div *ngIf="myForm.controls['password'].errors?.['required']">Unesite lozinku</div>
+                   <div *ngIf="myForm.controls['password'].errors?.['pattern']">Minimum osam karaktera</div>
+               </div>
+           </div>
+           <button type="submit" [disabled]="myForm.invalid" class="btn">Prijavi me</button>
+       </form> 
+   </div>
+</div>
