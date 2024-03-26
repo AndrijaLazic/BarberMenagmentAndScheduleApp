@@ -43,7 +43,7 @@ export class LoginPageComponent {
 	}
 
 	showSuccess (message: string) {
-		this.toast.success({detail:"SUCCESS", summary: message, duration: 5000});
+		this.toast.success({detail:"SUCCESS", summary: message, duration: 5000, sticky:true});
 	}
 
 
@@ -52,12 +52,15 @@ export class LoginPageComponent {
 	onSubmit (){
 		this.service.login(this.myForm.value).subscribe({
 			error: () => {this.showError("Doslo je do greske.");},
-			next: (response) => {
+			next: async (response) => {
 				console.log(response);
 				this.showSuccess("Dobrodosli!");
 				localStorage.setItem("JWT", response.data);
 				localStorage.setItem("User", JSON.stringify(jwtDecode(response.data)));
-				this.router.navigate([ "/" ]);
+				await new Promise(f => setTimeout(f, 2000));
+				this.router.navigate([ "/" ]).then(() => {
+					window.location.reload();
+				});
 			}
 		});
 	}

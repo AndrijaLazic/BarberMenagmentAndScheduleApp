@@ -36,13 +36,18 @@
 						<i class="bi bi-person-circle"></i> Nalog
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<li>
-							<a class="dropdown-item" routerLink="/prijava">Prijava</a>
-						</li>
-						<li>
-							<a class="dropdown-item" routerLink="/registracija"
-								>Registracija</a
-							>
+						<div *ngIf="!isLoggedIn">
+							<li>
+								<a class="dropdown-item" routerLink="/prijava">Prijava</a>
+							</li>
+							<li>
+								<a class="dropdown-item" routerLink="/registracija"
+									>Registracija</a
+								>
+							</li>
+						</div>
+						<li *ngIf="isLoggedIn">
+							<a class="dropdown-item" (click)="logout()" routerLink="/prijava">Odjava</a>
 						</li>
 						<!-- <li><hr class="dropdown-divider" /></li>
 						<li>
