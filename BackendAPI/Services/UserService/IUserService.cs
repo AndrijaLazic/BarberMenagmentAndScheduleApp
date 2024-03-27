@@ -7,5 +7,6 @@ namespace BackendAPI.Services.UserService
     public interface IUserService
     {
         Task<ServiceResponse<User>> RegisterUser(RegistrationDTO registrationDTO);
+        Task<ServiceResponse<string>> Login(LoginDTO loginDTO);
     }
 }

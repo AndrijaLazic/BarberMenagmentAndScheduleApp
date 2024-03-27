@@ -1,4 +1,5 @@
-﻿namespace BackendAPI.Models
+﻿
+namespace BackendAPI.Models
 {
     public class ServiceResponse<T>
     {

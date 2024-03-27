@@ -48,5 +48,25 @@ namespace BackendAPI.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("Login")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult<ServiceResponse<User>>> Login(LoginDTO dto)
+        {
+            ServiceResponse<string> response = new ServiceResponse<string>();
+            try
+            {
+                response = await _userService.Login(dto);
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }
