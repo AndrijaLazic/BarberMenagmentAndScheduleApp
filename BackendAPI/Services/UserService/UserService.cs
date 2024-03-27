@@ -2,6 +2,7 @@
 using BackendAPI.Models;
 using BackendAPI.Models.Database;
 using BackendAPI.Models.DTO;
+using System.Security.Cryptography;
 
 namespace BackendAPI.Services.UserService
 {
@@ -22,14 +23,16 @@ namespace BackendAPI.Services.UserService
                 User user = new User(
                         registrationDTO.Name,
                         registrationDTO.Email,
-                        registrationDTO.Password,
                         registrationDTO.PhoneNumber);
 
                 if (CheckIfUserExists(user))
                 {
                     throw new Exception("UserAlreadyExists");
                 }
-                    
+
+                CreatePasswordHash(registrationDTO.Password, out byte[] passwordHash, out byte[] passwordSalt);
+                user.PasswordSalt = passwordSalt;
+                user.PasswordHash = passwordHash;
 
                 _userContext.Users.Add(user);
 
@@ -64,6 +67,24 @@ namespace BackendAPI.Services.UserService
             }
 
             return true;
+        }
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
+            }
         }
     }
 }
