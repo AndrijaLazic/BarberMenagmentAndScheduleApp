@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MainPageComponent } from './pages/main-page/main-page.component';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { AuthGuard } from './shared/guards/auth.guard';
+import { NotLoggedInGuard } from './shared/guards/not-logged-in.guard';
+
 
 const routes: Routes = [
-	{ path: '', component: MainPageComponent, pathMatch: 'full' },
-	{ path: 'registracija', component: RegisterPageComponent, pathMatch: 'full', canDeactivate:[ AuthGuard ]},
-	{ path: 'prijava', component: LoginPageComponent, pathMatch: 'full', canDeactivate:[ AuthGuard ] },
+	{ path: 'registracija', component: RegisterPageComponent, pathMatch: 'full', canActivate:[ NotLoggedInGuard ]},
+	{ path: 'prijava', component: LoginPageComponent, pathMatch: 'full', canActivate:[ NotLoggedInGuard ] },
 ];
 
 @NgModule({

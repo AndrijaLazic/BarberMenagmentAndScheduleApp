@@ -10,11 +10,11 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 @Component({
 	selector: 'app-login-page',
 	standalone: true,
-	imports: [ 
+	imports: [
 		FormsModule,
 		ReactiveFormsModule,
 		CommonModule,
-		NgIf 
+		NgIf
 	],
 	templateUrl: './login-page.component.html',
 	styleUrl: './login-page.component.css'
@@ -33,20 +33,20 @@ export class LoginPageComponent {
 	){
 		this.myForm = this.formBuilder.group({
 			email: [ this.loginDTS.email, [ Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}') ] ],
-			password: [ this.loginDTS.password, [ Validators.required, Validators.pattern('.{8,20}') ] ]
+			password: [ this.loginDTS.password, [ Validators.required, Validators.pattern('.{3,20}') ] ]
 		});
 	}
 
 
 	showError (message: string) {
-		this.toast.error({detail:"ERROR", summary: message, sticky:true});
+		this.toast.error({detail:"ERROR", summary: message, duration: 5000, sticky:true});
 	}
 
 	showSuccess (message: string) {
 		this.toast.success({detail:"SUCCESS", summary: message, duration: 5000});
 	}
 
-	
+
 
 
 	onSubmit (){

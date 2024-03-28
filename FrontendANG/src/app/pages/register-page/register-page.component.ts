@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 @Component({
 	selector: 'app-register-page',
 	standalone: true,
-	imports: [ 
+	imports: [
 		FormsModule,
 		ReactiveFormsModule,
 		CommonModule,
@@ -34,9 +34,9 @@ export class RegisterPageComponent{
 private formBuilder: FormBuilder, private service: AuthService, private router: Router, private toast: NgToastService
 	) {
 		this.myForm = this.formBuilder.group({
-			name:  [ this.registerdts.name, [ Validators.required, Validators.pattern('.{8,20}') ] ],
+			name:  [ this.registerdts.name, [ Validators.required, Validators.pattern('.{3,20}') ] ],
 			email: [ this.registerdts.email, [ Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}') ] ],
-			password: [ this.registerdts.password, [ Validators.required, Validators.pattern('.{8,20}') ] ],
+			password: [ this.registerdts.password, [ Validators.required, Validators.pattern('.{6,20}') ] ],
 			phoneNumber: [ this.registerdts.phoneNumber, [ Validators.required, Validators.pattern('\\d{10}') ] ]
 		});
 	}
