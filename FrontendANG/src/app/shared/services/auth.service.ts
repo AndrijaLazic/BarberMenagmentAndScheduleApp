@@ -18,10 +18,19 @@ export class AuthService {
 		console.log(body);
 		return this.http.post(this.baseUrl+'Register', body);
 	}
-	
+
 	login (body: LoginDTS): Observable<any>{
 		console.log(body);
 		return this.http.post(this.baseUrl+'Login', body);
+	}
+
+	isLoggedIn ():boolean{
+
+		if(localStorage.getItem("JWT")==null){
+			return false;
+		}
+
+		return true;
 	}
 
 }

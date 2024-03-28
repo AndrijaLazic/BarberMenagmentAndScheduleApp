@@ -8,6 +8,8 @@ import { NavigationBarComponent } from './shared/components/navigation-bar/navig
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { NgToastModule } from "ng-angular-popup";
 
+
+
 @NgModule({
 	declarations: [ AppComponent, MainPageComponent ],
 	imports: [
