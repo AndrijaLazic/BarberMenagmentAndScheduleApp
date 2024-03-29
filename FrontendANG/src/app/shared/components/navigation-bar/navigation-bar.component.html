@@ -33,12 +33,20 @@
 						data-bs-toggle="dropdown"
 						aria-expanded="false"
 					>
-						<i class="bi bi-person-circle"></i> Nalog
+						<i class="bi bi-person-circle"></i>
+						<span *ngIf="!isLoggedIn()" style="margin-left: 10px"
+							>Nalog</span
+						>
+						<span *ngIf="isLoggedIn()" style="margin-left: 10px">{{
+							userData()?.Name
+						}}</span>
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<div *ngIf="!isLoggedIn">
+						<div *ngIf="!isLoggedIn()">
 							<li>
-								<a class="dropdown-item" routerLink="/prijava">Prijava</a>
+								<a class="dropdown-item" routerLink="/prijava"
+									>Prijava</a
+								>
 							</li>
 							<li>
 								<a class="dropdown-item" routerLink="/registracija"
@@ -46,8 +54,13 @@
 								>
 							</li>
 						</div>
-						<li *ngIf="isLoggedIn">
-							<a class="dropdown-item" (click)="logout()" routerLink="/prijava">Odjava</a>
+						<li *ngIf="isLoggedIn()">
+							<a
+								class="dropdown-item"
+								(click)="logout()"
+								routerLink="/prijava"
+								>Odjava</a
+							>
 						</li>
 						<!-- <li><hr class="dropdown-divider" /></li>
 						<li>

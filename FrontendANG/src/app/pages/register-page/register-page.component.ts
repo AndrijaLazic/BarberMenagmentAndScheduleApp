@@ -41,11 +41,11 @@ private formBuilder: FormBuilder, private service: AuthService, private router: 
 		});
 	}
 	showError (message: string) {
-		this.toast.error({detail:"ERROR", summary: message, sticky:true});
+		this.toast.error({detail:"ERROR", summary: message, duration: 3000});
 	}
 
 	showSuccess (message: string) {
-		this.toast.success({detail:"SUCCESS", summary: message, duration: 5000});
+		this.toast.success({detail:"SUCCESS", summary: message, duration: 3000});
 	}
 
 

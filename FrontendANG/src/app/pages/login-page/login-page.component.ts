@@ -2,7 +2,6 @@ import { CommonModule, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
 import { NgToastService } from 'ng-angular-popup';
 import { LoginDTS } from 'src/app/shared/models/LoginDTS';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -29,7 +28,10 @@ export class LoginPageComponent {
 
 
 	constructor (
-    private formBuilder: FormBuilder, private service: AuthService, private router: Router, private toast: NgToastService
+		private formBuilder: FormBuilder,
+		private service: AuthService,
+		private router: Router,
+		private toast: NgToastService
 	){
 		this.myForm = this.formBuilder.group({
 			email: [ this.loginDTS.email, [ Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}') ] ],
@@ -39,11 +41,11 @@ export class LoginPageComponent {
 
 
 	showError (message: string) {
-		this.toast.error({detail:"ERROR", summary: message, duration: 5000, sticky:true});
+		this.toast.error({detail:"ERROR", summary: message, duration: 3000});
 	}
 
 	showSuccess (message: string) {
-		this.toast.success({detail:"SUCCESS", summary: message, duration: 5000, sticky:true});
+		this.toast.success({detail:"SUCCESS", summary: message, duration: 3000});
 	}
 
 
@@ -53,14 +55,9 @@ export class LoginPageComponent {
 		this.service.login(this.myForm.value).subscribe({
 			error: () => {this.showError("Doslo je do greske.");},
 			next: async (response) => {
-				console.log(response);
 				this.showSuccess("Dobrodosli!");
-				localStorage.setItem("JWT", response.data);
-				localStorage.setItem("User", JSON.stringify(jwtDecode(response.data)));
-				await new Promise(f => setTimeout(f, 2000));
-				this.router.navigate([ "/" ]).then(() => {
-					window.location.reload();
-				});
+				this.service.setLogin(response.data);
+				this.router.navigate([ "/" ]);
 			}
 		});
 	}
