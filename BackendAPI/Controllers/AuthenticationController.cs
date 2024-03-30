@@ -35,7 +35,7 @@ namespace BackendAPI.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult<ServiceResponse<User>>> Register(RegistrationDTO dto)
         {
-            ServiceResponse<User> response=new ServiceResponse<User>();
+            ServiceResponse<bool> response=new ServiceResponse<bool>();
             try
             {
                 response=await _userService.RegisterUser(dto);
