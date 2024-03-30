@@ -15,10 +15,10 @@ namespace BackendAPI.Services.UserService
 {
     public class UserService : IUserService
     {
-        private UserContext _userContext;
+        private BarberDBContext _userContext;
         private readonly IOptions<AppConfiguration> _options;
 
-        public UserService(UserContext userContext, IOptions<AppConfiguration> options)
+        public UserService(BarberDBContext userContext, IOptions<AppConfiguration> options)
         {
             _userContext = userContext;
             _options = options;

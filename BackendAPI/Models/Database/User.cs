@@ -1,16 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BackendAPI.Models.Database
 {
-    public class User
+    public partial class User
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public byte[] PasswordHash { get; set; }
-
-        public byte[] PasswordSalt { get; set; }
-        public string PhoneNumber { get; set; }
+        public string Name { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public byte[] PasswordHash { get; set; } = null!;
+        public byte[] PasswordSalt { get; set; } = null!;
+        public string PhoneNumber { get; set; } = null!;
 
         public User(string name, string email, string phoneNumber)
         {

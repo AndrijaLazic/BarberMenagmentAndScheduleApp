@@ -16,10 +16,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<UserContext>(options =>
-{
-    options.UseSqlServer("Server=" + Environment.GetEnvironmentVariable("DATABASECONNECTION") + ";Database=BarberDB;Trusted_Connection=True;TrustServerCertificate=True;");
-});
+builder.Services.AddDbContext<BarberDBContext>();
 
 // Enable CORS
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
