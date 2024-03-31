@@ -1,6 +1,7 @@
 using BackendAPI;
 using BackendAPI.Data;
 using BackendAPI.Services.UserService;
+using BackendAPI.Services.WorkerService;
 using Microsoft.EntityFrameworkCore;
 
 DotNetEnv.Env.Load();
@@ -10,6 +11,7 @@ builder.Services.Configure<AppConfiguration>(builder.Configuration.GetSection("s
 
 // Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IWorkerService, WorkerService>();
 
 
 builder.Services.AddControllers();

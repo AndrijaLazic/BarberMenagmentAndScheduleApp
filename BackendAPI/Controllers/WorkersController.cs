@@ -1,6 +1,12 @@
-﻿using BackendAPI.Services.UserService;
+﻿using BackendAPI.Models.Database;
+using BackendAPI.Models.DTO;
+using BackendAPI.Models;
+using BackendAPI.Services.UserService;
+using BackendAPI.Services.WorkerService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,44 +18,72 @@ namespace BackendAPI.Controllers
     {
         private readonly ILogger<WorkersController> _logger;
         private readonly AppConfiguration _appConfiguration;
-        private readonly IUserService _userService;
+        private readonly IWorkerService _workerService;
 
-        public WorkersController(ILogger<WorkersController> logger, IOptions<AppConfiguration> options, IUserService userService)
+        public WorkersController(ILogger<WorkersController> logger, IOptions<AppConfiguration> options, IWorkerService workerService)
         {
             _logger = logger;
             _appConfiguration = options.Value;
-            _userService = userService;
-        }
-        // GET: api/<WorkersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+            _workerService = workerService;
         }
 
-        // GET api/<WorkersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPost("Register")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<ServiceResponse<bool>>> Register(WorkerRegistrationDTO dto)
         {
-            return "value";
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+            try
+            {
+                response = await _workerService.RegisterWorker(dto);
+
+            }
+            catch(DbUpdateException ex)
+            {
+                response.Success = false;
+
+                if (ex.InnerException != null)
+                {
+
+                    if (ex.InnerException is SqlException sqlEx)
+                    {
+                        response.Message= sqlEx.Message;
+                        return BadRequest(response);
+                    }
+ 
+                }
+                response.Message=ex.Message;
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                Console.WriteLine(ex);
+                return BadRequest(response);
+            }
+            return Ok(response);
         }
 
-        // POST api/<WorkersController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("Login")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult<ServiceResponse<string>>> Login(LoginDTO dto)
         {
-        }
+            ServiceResponse<string> response = new ServiceResponse<string>();
+            try
+            {
+                response = await _workerService.Login(dto);
 
-        // PUT api/<WorkersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<WorkersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
+            return Ok(response);
         }
     }
 }
