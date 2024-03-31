@@ -57,6 +57,12 @@
 						<li *ngIf="isLoggedIn()">
 							<a
 								class="dropdown-item"
+								(click)="messages()"
+								routerLink="/poruke"
+								>Poruke</a
+							>
+							<a
+								class="dropdown-item"
 								(click)="logout()"
 								routerLink="/prijava"
 								>Odjava</a

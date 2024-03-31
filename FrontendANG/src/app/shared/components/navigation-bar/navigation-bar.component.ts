@@ -30,4 +30,8 @@ export class NavigationBarComponent {
 		this.router.navigate([ "/prijava" ]);
 	}
 
+	messages (){
+		this.router.navigate([ "/poruke" ]);
+	}
+
 }

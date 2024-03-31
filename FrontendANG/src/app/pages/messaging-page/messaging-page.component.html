@@ -1,1 +1,57 @@
-<p>messaging-page works!</p>
+<div class="container-fluid mt-5">
+   <div class="row gy-3">
+     <div class="col-md-4">
+       <div class="card">
+         <div class="card-header">
+           Moji četovi
+         </div>
+         <div class="card-body custom-list-available-chats overflow-auto" id="available-chats">
+           <!-- List of available chats -->
+           <ul class="list-group">
+             <li class="list-group-item single-user-chat">
+               <i class="bi bi-person-circle"></i> Jovan Peric - poslednja poruka pre 1h
+             </li>
+             <li class="list-group-item single-user-chat">
+               <i class="bi bi-person-circle"></i> Andrija Peric - poslednja poruka pre 3h
+             </li>
+             <li class="list-group-item single-user-chat">
+               <i class="bi bi-person-circle"></i> Luka Peric - poslednja poruka pre 3min
+             </li>
+           </ul>
+         </div>
+       </div>
+     </div>
+
+     <div class="col-md-8">
+       <div class="card">
+         <div class="card-header">
+           Trenutni čet - <u>Nikola</u>
+         </div>
+         <div class="card-body messages" id="current-chat-messages">
+           <!-- Messages of the currently clicked chat -->
+           <div class="card message self align-self-start flex-grow-0">
+            <span>Cao</span>
+            <span className="message-footer">30.03.2024</span>
+           </div>
+           <div class="card message align-self-end flex-grow-0">
+            <span>Cao Nikola</span>
+            <span className="message-footer">30.03.2024</span>
+           </div>
+           <div class="card message self align-self-start flex-grow-0">
+            <span>Kako si ?</span>
+            <span className="message-footer">30.03.2024</span>
+           </div>
+           <!-- <b>Klikni na neki čet da bi video poruke</b> -->
+         </div>
+         <div class="card-footer">
+           <div class="input-group">
+             <input type="text" class="form-control" placeholder="Unesi poruku...">
+             <div class="input-group-append">
+               <button class="btn btn-primary" type="button">Pošalji</button>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
