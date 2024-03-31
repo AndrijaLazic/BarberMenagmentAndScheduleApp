@@ -33,9 +33,9 @@ namespace BackendAPI.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<ServiceResponse<User>>> Register(RegistrationDTO dto)
+        public async Task<ActionResult<ServiceResponse<bool>>> Register(RegistrationDTO dto)
         {
-            ServiceResponse<User> response=new ServiceResponse<User>();
+            ServiceResponse<bool> response=new ServiceResponse<bool>();
             try
             {
                 response=await _userService.RegisterUser(dto);
@@ -52,7 +52,7 @@ namespace BackendAPI.Controllers
         [HttpPost("Login")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<ServiceResponse<User>>> Login(LoginDTO dto)
+        public async Task<ActionResult<ServiceResponse<string>>> Login(LoginDTO dto)
         {
             ServiceResponse<string> response = new ServiceResponse<string>();
             try

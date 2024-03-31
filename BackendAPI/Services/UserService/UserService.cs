@@ -15,18 +15,18 @@ namespace BackendAPI.Services.UserService
 {
     public class UserService : IUserService
     {
-        private BarberDBContext _userContext;
+        private BarberDBContext _databaseContext;
         private readonly IOptions<AppConfiguration> _options;
 
         public UserService(BarberDBContext userContext, IOptions<AppConfiguration> options)
         {
-            _userContext = userContext;
+            _databaseContext = userContext;
             _options = options;
         }
 
-        public async Task<ServiceResponse<User>> RegisterUser(RegistrationDTO registrationDTO)
+        public async Task<ServiceResponse<bool>> RegisterUser(RegistrationDTO registrationDTO)
         {
-            ServiceResponse<User> response = new ServiceResponse<User>();
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
 
             User user = new User(
                     registrationDTO.Name,
@@ -42,10 +42,10 @@ namespace BackendAPI.Services.UserService
             user.PasswordSalt = passwordSalt;
             user.PasswordHash = passwordHash;
 
-            _userContext.Users.Add(user);
+            _databaseContext.Users.Add(user);
 
-            _userContext.SaveChanges();
-            response.Data = user;
+            _databaseContext.SaveChanges();
+            response.Data = true;
 
   
             return response;
@@ -56,7 +56,7 @@ namespace BackendAPI.Services.UserService
             ServiceResponse<string> response = new ServiceResponse<string>();
 
 
-            var user = _userContext.Users.Where(x => x.Email.Equals(loginDTO.Email)).FirstOrDefault();
+            var user = _databaseContext.Users.Where(x => x.Email.Equals(loginDTO.Email)).FirstOrDefault();
             if (user == null)
             {
                 throw new Exception("EmailDoesNotExist");
@@ -101,7 +101,7 @@ namespace BackendAPI.Services.UserService
 
             try
             {
-                User? oldUser = _userContext.Users.Where(user =>
+                User? oldUser = _databaseContext.Users.Where(user =>
                     user.Email.Equals(newUser.Email) ||
                     user.PhoneNumber.Equals(newUser.PhoneNumber)
                 ).FirstOrDefault();
