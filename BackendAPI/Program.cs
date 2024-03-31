@@ -1,5 +1,7 @@
 using BackendAPI;
 using BackendAPI.Data;
+using BackendAPI.Models.Socket;
+using BackendAPI.Services.DataService;
 using BackendAPI.Services.UserService;
 using BackendAPI.Services.WorkerService;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,10 @@ builder.Services.Configure<AppConfiguration>(builder.Configuration.GetSection("s
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IWorkerService, WorkerService>();
 
+
+// Socket
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<SharedDB>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,6 +42,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -50,5 +58,7 @@ app.UseCors(myAllowSpecificOrigins);
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<WorkerChatHub>("/worker-chat");
 
 app.Run();
