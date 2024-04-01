@@ -7,6 +7,7 @@ namespace BackendAPI.Models.Database
     {
         public int CommunicationId { get; set; }
         public string Message { get; set; } = null!;
+        public int SenderID { get; set; }
 
         public virtual WorkerCommunication Communication { get; set; } = null!;
     }

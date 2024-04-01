@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -103,6 +104,43 @@ namespace BackendAPI.Controllers
                 response.Message = ex.Message;
                 return BadRequest(response);
             }
+            return Ok(response);
+        }
+
+        [HttpGet("WorkerChat")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult<ServiceResponse<List<WorkerMessage>>>> GetWorkerChat(string secondUserId, [FromHeader]string JWT)
+        {
+            ServiceResponse<List<WorkerMessage>> response = new ServiceResponse<List<WorkerMessage>>();
+            ServiceResponse<WorkerCommunication> chatResponse;
+
+            string ?id = WorkerService.ValidateToken(JWT);
+            if(id == null)
+            {
+                response.Success = false;
+                response.Message = "InvalidJWT";
+                return BadRequest(response);
+            }
+
+            int userID= int.Parse(id);
+
+            try
+            {
+                chatResponse = await _workerService.GetChat(userID, int.Parse(secondUserId));
+
+                response = await _workerService.GetChatMessages(chatResponse.Data!.Id);
+
+                Console.WriteLine(response.Data);
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
+            
             return Ok(response);
         }
     }

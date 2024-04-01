@@ -2,15 +2,18 @@
 using BackendAPI.Models;
 using BackendAPI.Models.Database;
 using BackendAPI.Models.DTO;
+using BackendAPI.Models.Socket;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace BackendAPI.Services.WorkerService
 {
-    public class WorkerService:IWorkerService
+    public class WorkerService : IWorkerService
     {
         private BarberDBContext _databaseContext;
         private readonly IOptions<AppConfiguration> _options;
@@ -103,7 +106,8 @@ namespace BackendAPI.Services.WorkerService
                 new Claim("PhoneNumber",user.PhoneNumber),
                 new Claim("Email",user.Email),
                 new Claim("Name",user.Name),
-                new Claim("LastName",user.LastName)
+                new Claim("LastName",user.LastName),
+                new Claim("Id",user.Id.ToString())
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -118,6 +122,73 @@ namespace BackendAPI.Services.WorkerService
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
+        }
+
+        public static string? ValidateToken(string token)
+        {
+            if (token == null)
+                return null;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY")!);
+
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+
+                    ClockSkew = TimeSpan.Zero
+                },
+                out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+
+                var Id = (jwtToken.Claims.First(x => x.Type == "Id").Value);
+
+                return Id;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
+        public async Task<ServiceResponse<WorkerCommunication>> GetChat(int userId, int secondUserId)
+        {
+            ServiceResponse<WorkerCommunication> response = new ServiceResponse<WorkerCommunication>();
+            
+            WorkerCommunication ?chat = _databaseContext.WorkerCommunications.Where(x => (x.User1 == userId && x.User2 == secondUserId) ||
+                                                                            (x.User1 == secondUserId && x.User2 == userId)).FirstOrDefault();
+            response.Data = chat;
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<WorkerMessage>>> GetChatMessages(int chatId)
+        {
+            ServiceResponse<List<WorkerMessage>> response = new ServiceResponse<List<WorkerMessage>>();
+            response.Data = _databaseContext.WorkerMessages.Where(x => x.CommunicationId == chatId).ToList();
+            return response;
+        }
+
+        public async Task<ServiceResponse<WorkerCommunication>> CreateWorkerChat(int User1Id, int User2Id)
+        {
+            ServiceResponse<WorkerCommunication> response = new ServiceResponse<WorkerCommunication>();
+            WorkerCommunication communication = new WorkerCommunication
+            {
+                UnreadMessages = 0,
+                User1 = User1Id,
+                User2 = User2Id
+            };
+            _databaseContext.WorkerCommunications.Add(communication);
+            _databaseContext.SaveChanges();
+            response.Data = communication;
+            return response;
         }
     }
 }
