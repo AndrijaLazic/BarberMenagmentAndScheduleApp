@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using BackendAPI.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -105,6 +106,45 @@ namespace BackendAPI.Data
                     .IsUnicode(false)
                     .HasColumnName("WorkerType");
             });
+
+            WorkerType workertype1 = new WorkerType
+            {
+                Id=1,
+                WorkerType1 = "Menadzer"
+            };
+            WorkerType workertype2 = new WorkerType
+            {
+                Id = 2,
+                WorkerType1 = "Frizer"
+            };
+
+            Worker worker1 = new Worker
+            {
+                Id = 1,
+                Email = "andrija223@yahoo.com",
+                Name = "andrija",
+                LastName = "Lazic",
+                PasswordHash = Encoding.UTF8.GetBytes("0xE245A2AE87FFE00286B99B218BB3EC5CD8F034E9203C2848D07D97728FF225EEBE892C0E476627FC74579EA985E27027569C8F6C7A5CDAE93FC5E4FFBFCB2E7B"),
+                PasswordSalt = Encoding.UTF8.GetBytes("0x194BF185B6988BF2932A494AC696749D5642B10C5B7BECAFF752A7EBB66180D8506FDA6EF51E84EEF6E4113EB9A9BD04154C4D18E8777A2AD15C2368EC0AFB934E471418AB0698D7E8827F70B81D6CEC1F6F6B0236FCF7A39A2253AAD7561342B585A33E49A0AACA7F52A08AB0C80D89473CDAEF060C33EAED7998E5049B7791"),
+                WorkerTypeId = 1,
+                PhoneNumber = "0695561004"
+            };
+
+            Worker worker2 = new Worker
+            {
+                Id = 2,
+                Email = "brzi223@yahoo.com",
+                Name = "Jovan",
+                LastName = "Brzi",
+                PasswordHash = Encoding.UTF8.GetBytes("0xE245A2AE87FFE00286B99B218BB3EC5CD8F034E9203C2848D07D97728FF225EEBE892C0E476627FC74579EA985E27027569C8F6C7A5CDAE93FC5E4FFBFCB2E7B"),
+                PasswordSalt = Encoding.UTF8.GetBytes("0x194BF185B6988BF2932A494AC696749D5642B10C5B7BECAFF752A7EBB66180D8506FDA6EF51E84EEF6E4113EB9A9BD04154C4D18E8777A2AD15C2368EC0AFB934E471418AB0698D7E8827F70B81D6CEC1F6F6B0236FCF7A39A2253AAD7561342B585A33E49A0AACA7F52A08AB0C80D89473CDAEF060C33EAED7998E5049B7791"),
+                WorkerTypeId = 2,
+                PhoneNumber = "0695561004"
+            };
+
+            modelBuilder.Entity<WorkerType>().HasData(workertype1, workertype2);
+            modelBuilder.Entity<Worker>().HasData(worker1, worker2);
+
 
             OnModelCreatingPartial(modelBuilder);
         }
