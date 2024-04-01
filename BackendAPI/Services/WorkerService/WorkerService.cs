@@ -67,6 +67,17 @@ namespace BackendAPI.Services.WorkerService
             return response;
         }
 
+        public async Task<ServiceResponse<List<Worker>>> GetWorkers()
+        {
+            ServiceResponse<List<Worker>> response = new ServiceResponse<List<Worker>>();
+
+            List<Worker> workers = new List<Worker>();
+            workers = _databaseContext.Workers.ToList();
+            response.Data = workers;
+
+            return response;
+        }
+
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())

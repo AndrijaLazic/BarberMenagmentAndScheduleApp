@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class WorkersController : ControllerBase
     {
@@ -75,6 +75,26 @@ namespace BackendAPI.Controllers
             try
             {
                 response = await _workerService.Login(dto);
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("Workers")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult<ServiceResponse<List<Worker>>>> GetWorkers()
+        {
+            ServiceResponse<List<Worker>> response = new ServiceResponse<List<Worker>>();
+            try
+            {
+                response = await _workerService.GetWorkers();
 
             }
             catch (Exception ex)
