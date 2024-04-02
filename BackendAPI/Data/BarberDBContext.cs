@@ -28,7 +28,7 @@ namespace BackendAPI.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-6F991P0;Database=BarberDB;Trusted_Connection=True;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Server="+ Environment.GetEnvironmentVariable("DATABASECONNECTION")! + ";Database=BarberDB;Trusted_Connection=True;TrustServerCertificate=True;");
             }
         }
 

@@ -32,8 +32,7 @@ export class LoginPageComponent {
 		private formBuilder: FormBuilder,
 		@Inject('IAuthService') private service: IAuthSerice,
 		private router: Router,
-		private toast: NgToastService,
-		private signalR: SignalRService
+		private toast: NgToastService
 	){
 		this.myForm = this.formBuilder.group({
 			email: [ this.loginDTS.email, [ Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}') ] ],

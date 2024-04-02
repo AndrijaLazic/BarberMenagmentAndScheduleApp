@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAPI.Migrations
 {
     [DbContext(typeof(BarberDBContext))]
-    [Migration("20240401093239_newMigration")]
-    partial class newMigration
+    [Migration("20240402172757_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,7 +63,7 @@ namespace BackendAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Database.Worker", b =>
+            modelBuilder.Entity("BackendAPI.Models.Worker", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkerTypeId");
+                    b.HasIndex(new[] { "WorkerTypeId" }, "IX_Workers_WorkerTypeId");
 
                     b.ToTable("Workers");
 
@@ -137,11 +137,14 @@ namespace BackendAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Database.WorkerCommunication", b =>
+            modelBuilder.Entity("BackendAPI.Models.WorkerCommunication", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("UnreadMessages")
                         .HasColumnType("int");
@@ -160,8 +163,14 @@ namespace BackendAPI.Migrations
                     b.ToTable("WorkerCommunication", (string)null);
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Database.WorkerMessage", b =>
+            modelBuilder.Entity("BackendAPI.Models.WorkerMessage", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("CommunicationId")
                         .HasColumnType("int")
                         .HasColumnName("CommunicationID");
@@ -170,12 +179,18 @@ namespace BackendAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasIndex("CommunicationId");
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int")
+                        .HasColumnName("SenderID");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex(new[] { "CommunicationId" }, "IX_WorkerMessages_CommunicationID");
 
                     b.ToTable("WorkerMessages");
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Database.WorkerType", b =>
+            modelBuilder.Entity("BackendAPI.Models.WorkerType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -207,9 +222,9 @@ namespace BackendAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Database.Worker", b =>
+            modelBuilder.Entity("BackendAPI.Models.Worker", b =>
                 {
-                    b.HasOne("BackendAPI.Models.Database.WorkerType", "WorkerType")
+                    b.HasOne("BackendAPI.Models.WorkerType", "WorkerType")
                         .WithMany("Workers")
                         .HasForeignKey("WorkerTypeId")
                         .IsRequired()
@@ -218,9 +233,9 @@ namespace BackendAPI.Migrations
                     b.Navigation("WorkerType");
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Database.WorkerCommunication", b =>
+            modelBuilder.Entity("BackendAPI.Models.WorkerCommunication", b =>
                 {
-                    b.HasOne("BackendAPI.Models.Database.Worker", "User1Navigation")
+                    b.HasOne("BackendAPI.Models.Worker", "User1Navigation")
                         .WithMany("WorkerCommunications")
                         .HasForeignKey("User1")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -230,10 +245,10 @@ namespace BackendAPI.Migrations
                     b.Navigation("User1Navigation");
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Database.WorkerMessage", b =>
+            modelBuilder.Entity("BackendAPI.Models.WorkerMessage", b =>
                 {
-                    b.HasOne("BackendAPI.Models.Database.WorkerCommunication", "Communication")
-                        .WithMany()
+                    b.HasOne("BackendAPI.Models.WorkerCommunication", "Communication")
+                        .WithMany("WorkerMessages")
                         .HasForeignKey("CommunicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -242,12 +257,17 @@ namespace BackendAPI.Migrations
                     b.Navigation("Communication");
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Database.Worker", b =>
+            modelBuilder.Entity("BackendAPI.Models.Worker", b =>
                 {
                     b.Navigation("WorkerCommunications");
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Database.WorkerType", b =>
+            modelBuilder.Entity("BackendAPI.Models.WorkerCommunication", b =>
+                {
+                    b.Navigation("WorkerMessages");
+                });
+
+            modelBuilder.Entity("BackendAPI.Models.WorkerType", b =>
                 {
                     b.Navigation("Workers");
                 });

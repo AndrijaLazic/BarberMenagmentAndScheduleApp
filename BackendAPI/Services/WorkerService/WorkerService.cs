@@ -126,6 +126,7 @@ namespace BackendAPI.Services.WorkerService
 
         public static string? ValidateToken(string token)
         {
+            Console.WriteLine(token);
             if (token == null)
                 return null;
 

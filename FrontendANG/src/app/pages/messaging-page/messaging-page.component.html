@@ -1,3 +1,5 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
 <div class="container-fluid mt-5">
    <div class="row gy-3">
      <div class="col-md-4">
@@ -8,14 +10,8 @@
          <div class="card-body custom-list-available-chats overflow-auto" id="available-chats">
            <!-- List of available chats -->
            <ul class="list-group">
-             <li class="list-group-item single-user-chat">
-               <i class="bi bi-person-circle"></i> Jovan Peric - poslednja poruka pre 1h
-             </li>
-             <li class="list-group-item single-user-chat">
-               <i class="bi bi-person-circle"></i> Andrija Peric - poslednja poruka pre 3h
-             </li>
-             <li class="list-group-item single-user-chat">
-               <i class="bi bi-person-circle"></i> Luka Peric - poslednja poruka pre 3min
+             <li class="list-group-item single-user-chat" (click)="showChat(worker.id)" *ngFor="let worker of workers">
+               <i class="bi bi-person-circle"></i> {{worker.name}} - {{worker.lastName}}
              </li>
            </ul>
          </div>
