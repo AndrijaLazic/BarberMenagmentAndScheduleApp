@@ -6,6 +6,7 @@ namespace BackendAPI.Services.DataService
     public class SharedDB
     {
         private ConcurrentDictionary<string, WorkerChat> _chatsBetweenWorkers=new ConcurrentDictionary<string, WorkerChat>();
+        private ConcurrentDictionary<string, string> _onlineWorkers=new ConcurrentDictionary<string, string>();
 
         public WorkerChat? GiveWorkerChat(int workerOneId, int workerTwoId)
         {
@@ -20,22 +21,66 @@ namespace BackendAPI.Services.DataService
             return null;
         }
 
-        public WorkerChat AddWorkerChat(WorkerChat chat, string userConnId)
+        public WorkerChat AddWorkerChat(int user1Id, int user2Id, string userConnId)
         {
-            WorkerChat ?newChat = GiveWorkerChat(chat.user1Id, chat.user2Id);
-            if(newChat!=null)
+            WorkerChat ?oldChat = GiveWorkerChat(user1Id, user2Id);
+            if(oldChat != null)
             {
-                if (newChat.user1Connection == null)
+                if (oldChat.worker1.userConnectionId == null)
                 {
-                    newChat.user1Connection = userConnId;
-                    return newChat;
+                    oldChat.worker1.userConnectionId = userConnId;
+                    return oldChat;
                 }
-                newChat.user2Connection = userConnId;
-                return newChat;
+                oldChat.worker2.userConnectionId = userConnId;
+                return oldChat;
             }
-            chat.user1Connection = userConnId;
-            _chatsBetweenWorkers.TryAdd(chat.chatKey, chat);
-            return chat;
+
+            WorkerChat? newChat=new WorkerChat(user1Id, user2Id);
+            newChat.worker1.userConnectionId = userConnId;
+            _chatsBetweenWorkers.TryAdd(newChat.chatKey, newChat);
+            return newChat;
         }
+
+        public void setWorkerOnline(string workerId, string connection) {
+            _onlineWorkers.TryAdd(workerId, connection);
+        }
+
+        public string? disconnectWorker(string connId) {
+            KeyValuePair<string, string> pair = _onlineWorkers.FirstOrDefault(x => x.Value == connId);
+            if (pair.Equals(default(KeyValuePair<string, string>)))
+            {
+                return null;
+            }
+            Console.WriteLine($"Key: {pair.Key}, Value: {pair.Value}");
+            _onlineWorkers.TryRemove(pair.Key, out string? result);
+
+            List<KeyValuePair<string, WorkerChat>> chatRooms = _chatsBetweenWorkers
+                .Where(x => x.Value.worker1.userConnectionId == connId || x.Value.worker2.userConnectionId == connId).ToList();
+
+            foreach(KeyValuePair<string, WorkerChat> room in chatRooms)
+            {
+                if(room.Value.worker1.userConnectionId == connId)
+                {
+                    room.Value.worker1.userConnectionId = "";
+                }
+                else
+                {
+                    room.Value.worker2.userConnectionId = "";
+                }
+
+                if(room.Value.worker1.userConnectionId == "" && room.Value.worker2.userConnectionId == "")
+                {
+                    _chatsBetweenWorkers.TryRemove(room.Key,out WorkerChat? roomChat);
+                }
+            }
+
+            return pair.Key;
+        }
+
+        public string? isWorkerOnline(string workerId) {
+            _onlineWorkers.TryGetValue(workerId, out string? connId);
+            return connId;
+        }
+
     }
 }

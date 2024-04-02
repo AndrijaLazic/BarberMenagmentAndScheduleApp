@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace BackendAPI.Services.WorkerService
 {
@@ -103,7 +104,8 @@ namespace BackendAPI.Services.WorkerService
                 new Claim("PhoneNumber",user.PhoneNumber),
                 new Claim("Email",user.Email),
                 new Claim("Name",user.Name),
-                new Claim("LastName",user.LastName)
+                new Claim("LastName",user.LastName),
+                new Claim("Id",user.Id.ToString())
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -118,6 +120,40 @@ namespace BackendAPI.Services.WorkerService
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
+        }
+
+        public static string? ValidateToken(string token)
+        {
+            if (token == null)
+                return null;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY")!);
+
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+
+                    ClockSkew = TimeSpan.Zero
+                },
+                out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+
+                var Id = (jwtToken.Claims.First(x => x.Type == "Id").Value);
+
+                return Id;
+            }
+            catch
+            {
+                return null;
+            }
+
         }
     }
 }
