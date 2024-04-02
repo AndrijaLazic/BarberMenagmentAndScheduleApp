@@ -2,8 +2,10 @@
 using BackendAPI.Models;
 using BackendAPI.Models.Database;
 using BackendAPI.Models.DTO;
+using BackendAPI.Models.Socket;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -11,7 +13,7 @@ using System.Text;
 
 namespace BackendAPI.Services.WorkerService
 {
-    public class WorkerService:IWorkerService
+    public class WorkerService : IWorkerService
     {
         private BarberDBContext _databaseContext;
         private readonly IOptions<AppConfiguration> _options;
@@ -154,6 +156,31 @@ namespace BackendAPI.Services.WorkerService
                 return null;
             }
 
+        }
+
+        public async Task<ServiceResponse<WorkerCommunication>> GetChat(string JWT, int secondUserId)
+        {
+            ServiceResponse<WorkerCommunication> response = new ServiceResponse<WorkerCommunication>();
+
+            string ?userId = ValidateToken(JWT);
+            if (userId == null)
+                throw new Exception("JWTNotValid");
+            
+            int userIDint=int.Parse(userId);
+            WorkerCommunication ?chat = _databaseContext.WorkerCommunications.Where(x => (x.User1 == userIDint && x.User2 == secondUserId) ||
+                                                                            (x.User1 == secondUserId && x.User2 == userIDint)).FirstOrDefault();
+            if (chat == null)
+                throw new Exception("ChatNotFound");
+            response.Data = chat;
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<WorkerMessage>>> GetChatMessages(int chatId)
+        {
+            ServiceResponse<List<WorkerMessage>> response = new ServiceResponse<List<WorkerMessage>>();
+            response.Data = _databaseContext.WorkerMessages.Where(x => x.CommunicationId == chatId).ToList();
+            return response;
         }
     }
 }
