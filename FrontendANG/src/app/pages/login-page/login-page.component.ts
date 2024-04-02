@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import { LoginDTS } from 'src/app/shared/models/LoginDTS';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { SignalRService } from 'src/app/shared/services/signal-r.service';
 
 @Component({
 	selector: 'app-login-page',
@@ -31,12 +32,22 @@ export class LoginPageComponent {
 		private formBuilder: FormBuilder,
 		private service: AuthService,
 		private router: Router,
-		private toast: NgToastService
+		private toast: NgToastService,
+		private signalR: SignalRService
 	){
 		this.myForm = this.formBuilder.group({
 			email: [ this.loginDTS.email, [ Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}') ] ],
 			password: [ this.loginDTS.password, [ Validators.required, Validators.pattern('.{3,20}') ] ]
 		});
+
+		
+		this.signalR.startConnection().then((value)=>{
+			console.log(value);
+			if(value === true){
+				this.signalR.JoinChatWithUser(1, 2);
+			}
+		});
+
 	}
 
 
