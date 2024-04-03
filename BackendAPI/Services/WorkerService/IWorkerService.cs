@@ -14,6 +14,9 @@ namespace BackendAPI.Services.WorkerService
 
         Task<ServiceResponse<List<WorkerMessage>>> GetChatMessages(int chatId);
 
-        Task<ServiceResponse<WorkerCommunication>> GetChat(string JWT, int secondUserId);
+        Task<ServiceResponse<WorkerCommunication>> GetChat(int userId, int secondUserId);
+
+        Task<ServiceResponse<WorkerCommunication>> CreateWorkerChat(int User1Id,int User2Id);
+
     }
 }

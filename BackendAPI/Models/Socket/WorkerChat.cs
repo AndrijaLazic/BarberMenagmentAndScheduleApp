@@ -5,14 +5,16 @@
         public readonly string chatKey;
         public WorkerInfoSocket worker1;
         public WorkerInfoSocket worker2;
+        public int ChatId;
 
-        public WorkerChat(int user1Id, int user2Id)
+        public WorkerChat(int user1Id, int user2Id, int chatId)
         {
             this.worker1 = new WorkerInfoSocket();
             worker1.Id = user1Id;
             this.worker2 = new WorkerInfoSocket();
             worker2.Id = user2Id;
-            this.chatKey = $"{user1Id}"+"/"+$"{user2Id}";
+            this.chatKey = $"{user1Id}" + "/" + $"{user2Id}";
+            ChatId = chatId;
         }
     }
 

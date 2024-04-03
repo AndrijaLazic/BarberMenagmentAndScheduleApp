@@ -158,19 +158,12 @@ namespace BackendAPI.Services.WorkerService
 
         }
 
-        public async Task<ServiceResponse<WorkerCommunication>> GetChat(string JWT, int secondUserId)
+        public async Task<ServiceResponse<WorkerCommunication>> GetChat(int userId, int secondUserId)
         {
             ServiceResponse<WorkerCommunication> response = new ServiceResponse<WorkerCommunication>();
-
-            string ?userId = ValidateToken(JWT);
-            if (userId == null)
-                throw new Exception("JWTNotValid");
             
-            int userIDint=int.Parse(userId);
-            WorkerCommunication ?chat = _databaseContext.WorkerCommunications.Where(x => (x.User1 == userIDint && x.User2 == secondUserId) ||
-                                                                            (x.User1 == secondUserId && x.User2 == userIDint)).FirstOrDefault();
-            if (chat == null)
-                throw new Exception("ChatNotFound");
+            WorkerCommunication ?chat = _databaseContext.WorkerCommunications.Where(x => (x.User1 == userId && x.User2 == secondUserId) ||
+                                                                            (x.User1 == secondUserId && x.User2 == userId)).FirstOrDefault();
             response.Data = chat;
 
             return response;
@@ -180,6 +173,21 @@ namespace BackendAPI.Services.WorkerService
         {
             ServiceResponse<List<WorkerMessage>> response = new ServiceResponse<List<WorkerMessage>>();
             response.Data = _databaseContext.WorkerMessages.Where(x => x.CommunicationId == chatId).ToList();
+            return response;
+        }
+
+        public async Task<ServiceResponse<WorkerCommunication>> CreateWorkerChat(int User1Id, int User2Id)
+        {
+            ServiceResponse<WorkerCommunication> response = new ServiceResponse<WorkerCommunication>();
+            WorkerCommunication communication = new WorkerCommunication
+            {
+                UnreadMessages = 0,
+                User1 = User1Id,
+                User2 = User2Id
+            };
+            _databaseContext.WorkerCommunications.Add(communication);
+            _databaseContext.SaveChanges();
+            response.Data = communication;
             return response;
         }
     }

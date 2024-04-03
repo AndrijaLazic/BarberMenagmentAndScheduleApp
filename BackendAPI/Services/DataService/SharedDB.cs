@@ -21,7 +21,7 @@ namespace BackendAPI.Services.DataService
             return null;
         }
 
-        public WorkerChat AddWorkerChat(int user1Id, int user2Id, string userConnId)
+        public WorkerChat AddWorkerChat(int user1Id, int user2Id, string userConnId,int chatID)
         {
             WorkerChat ?oldChat = GiveWorkerChat(user1Id, user2Id);
             if(oldChat != null)
@@ -35,7 +35,7 @@ namespace BackendAPI.Services.DataService
                 return oldChat;
             }
 
-            WorkerChat? newChat=new WorkerChat(user1Id, user2Id);
+            WorkerChat? newChat=new WorkerChat(user1Id, user2Id, chatID);
             newChat.worker1.userConnectionId = userConnId;
             _chatsBetweenWorkers.TryAdd(newChat.chatKey, newChat);
             return newChat;

@@ -110,15 +110,28 @@ namespace BackendAPI.Controllers
         [HttpGet("WorkerChat")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<ServiceResponse<List<Worker>>>> GetWorkerChat(string secondUserId, [FromHeader]string JWT)
+        public async Task<ActionResult<ServiceResponse<List<WorkerMessage>>>> GetWorkerChat(string secondUserId, [FromHeader]string JWT)
         {
             ServiceResponse<List<WorkerMessage>> response = new ServiceResponse<List<WorkerMessage>>();
             ServiceResponse<WorkerCommunication> chatResponse;
+
+            string ?id = WorkerService.ValidateToken(JWT);
+            if(id == null)
+            {
+                response.Success = false;
+                response.Message = "InvalidJWT";
+                return BadRequest(response);
+            }
+
+            int userID= int.Parse(id);
+
             try
             {
-                chatResponse = await _workerService.GetChat(JWT, int.Parse(secondUserId));
+                chatResponse = await _workerService.GetChat(userID, int.Parse(secondUserId));
 
                 response = await _workerService.GetChatMessages(chatResponse.Data!.Id);
+
+                Console.WriteLine(response.Data);
 
             }
             catch (Exception ex)
