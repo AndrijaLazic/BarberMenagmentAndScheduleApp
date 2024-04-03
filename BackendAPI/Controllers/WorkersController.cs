@@ -114,7 +114,7 @@ namespace BackendAPI.Controllers
         {
             ServiceResponse<List<WorkerMessage>> response = new ServiceResponse<List<WorkerMessage>>();
             ServiceResponse<WorkerCommunication> chatResponse;
-
+            
             string ?id = WorkerService.ValidateToken(JWT);
             if(id == null)
             {
@@ -129,9 +129,14 @@ namespace BackendAPI.Controllers
             {
                 chatResponse = await _workerService.GetChat(userID, int.Parse(secondUserId));
 
+                if(chatResponse.Data == null)
+                {
+                    await _workerService.CreateWorkerChat(userID, int.Parse(secondUserId));
+                    return Ok(response);
+                }
+
                 response = await _workerService.GetChatMessages(chatResponse.Data!.Id);
 
-                Console.WriteLine(response.Data);
 
             }
             catch (Exception ex)

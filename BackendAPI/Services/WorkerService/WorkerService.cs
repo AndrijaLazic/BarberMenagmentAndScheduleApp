@@ -126,6 +126,7 @@ namespace BackendAPI.Services.WorkerService
 
         public static string? ValidateToken(string token)
         {
+            Console.WriteLine(token);
             if (token == null)
                 return null;
 
@@ -197,7 +198,7 @@ namespace BackendAPI.Services.WorkerService
             WorkerMessage workerMessage = new WorkerMessage
             {
                 Message = Message,
-                SenderID = SenderID
+                SenderId = SenderID
             };
             _databaseContext.WorkerMessages.Add(workerMessage);
             _databaseContext.SaveChanges();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BackendAPI.Models;
+using BackendAPI.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -27,7 +28,7 @@ namespace BackendAPI.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-6F991P0;Database=BarberDB;Trusted_Connection=True;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Server="+ Environment.GetEnvironmentVariable("DATABASECONNECTION")! + ";Database=BarberDB;Trusted_Connection=True;TrustServerCertificate=True;");
             }
         }
 

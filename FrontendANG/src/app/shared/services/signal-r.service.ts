@@ -18,7 +18,7 @@ export class SignalRService {
 				skipNegotiation: true,
 				transport: signalR.HttpTransportType.WebSockets,
 				withCredentials: false,
-				Headers:{"JWT":JWT}
+				headers:{"JWT":JWT}
 			})
 			.configureLogging(signalR.LogLevel.Information)
 			.build();
