@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BackendAPI.Models.Database
+namespace BackendAPI.Models
 {
     public partial class Worker
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using BackendAPI.Models.Database;
+using BackendAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -28,7 +27,7 @@ namespace BackendAPI.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=" + Environment.GetEnvironmentVariable("DATABASECONNECTION") + ";Database=BarberDB;Trusted_Connection=True;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-6F991P0;Database=BarberDB;Trusted_Connection=True;TrustServerCertificate=True;");
             }
         }
 
@@ -45,6 +44,8 @@ namespace BackendAPI.Data
 
             modelBuilder.Entity<Worker>(entity =>
             {
+                entity.HasIndex(e => e.WorkerTypeId, "IX_Workers_WorkerTypeId");
+
                 entity.Property(e => e.Email)
                     .HasMaxLength(30)
                     .IsUnicode(false);
@@ -75,9 +76,7 @@ namespace BackendAPI.Data
                 entity.HasIndex(e => new { e.User1, e.User2 }, "IX_WorkerCommunication")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.HasOne(d => d.User1Navigation)
                     .WithMany(p => p.WorkerCommunications)
@@ -87,14 +86,16 @@ namespace BackendAPI.Data
 
             modelBuilder.Entity<WorkerMessage>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasIndex(e => e.CommunicationId, "IX_WorkerMessages_CommunicationID");
 
                 entity.Property(e => e.CommunicationId).HasColumnName("CommunicationID");
 
                 entity.Property(e => e.Message).HasColumnType("text");
 
+                entity.Property(e => e.SenderId).HasColumnName("SenderID");
+
                 entity.HasOne(d => d.Communication)
-                    .WithMany()
+                    .WithMany(p => p.WorkerMessages)
                     .HasForeignKey(d => d.CommunicationId)
                     .HasConstraintName("FK_WorkerMessages_WorkerCommunication");
             });
@@ -109,7 +110,7 @@ namespace BackendAPI.Data
 
             WorkerType workertype1 = new WorkerType
             {
-                Id=1,
+                Id = 1,
                 WorkerType1 = "Menadzer"
             };
             WorkerType workertype2 = new WorkerType
@@ -144,7 +145,6 @@ namespace BackendAPI.Data
 
             modelBuilder.Entity<WorkerType>().HasData(workertype1, workertype2);
             modelBuilder.Entity<Worker>().HasData(worker1, worker2);
-
 
             OnModelCreatingPartial(modelBuilder);
         }

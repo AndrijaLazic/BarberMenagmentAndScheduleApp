@@ -130,14 +130,39 @@ namespace BackendAPI.Models.Socket
             }));
         }
 
-        public async Task SendMessage(int user1Id, int user2Id, string message)
+        public async Task SendMessage(int user2Id, string message)
         {
-            WorkerChat ?chat=_sharedDb.GiveWorkerChat(user1Id, user2Id);
+            // Access the HTTP context
+            HttpContext? httpContext = Context.GetHttpContext();
+
+            string JWT = "";
+            if (httpContext == null)
+            {
+                await Clients.Caller.ValidationError("InvalidJWT");
+                return;
+            }
+            if (!httpContext!.Request.Headers.TryGetValue("JWT", out StringValues header))
+            {
+                await Clients.Caller.ValidationError("InvalidJWT");
+                return;
+            }
+            JWT = header.ToString();
+
+            string? userId = WorkerService.ValidateToken(JWT);
+            if (userId == null)
+            {
+                await Clients.Caller.ValidationError("InvalidJWT");
+                return;
+            }
+
+            WorkerChat ?chat=_sharedDb.GiveWorkerChat(int.Parse(userId), user2Id);
             if (chat == null)
                 return;
 
+            await _workerService.PostMessage(message, int.Parse(userId));
+
             await Clients.Group(chat.chatKey)
-                    .ReceiveSpecificMessage(user2Id, message);
+                    .ReceiveSpecificMessage(int.Parse(userId), message);
         }
     }
 

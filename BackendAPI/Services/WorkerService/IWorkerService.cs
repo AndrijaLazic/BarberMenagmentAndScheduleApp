@@ -18,5 +18,7 @@ namespace BackendAPI.Services.WorkerService
 
         Task<ServiceResponse<WorkerCommunication>> CreateWorkerChat(int User1Id,int User2Id);
 
+        Task<ServiceResponse<int>> PostMessage(string Message, int SenderID);
+
     }
 }

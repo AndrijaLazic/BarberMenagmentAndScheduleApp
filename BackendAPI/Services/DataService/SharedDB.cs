@@ -51,7 +51,7 @@ namespace BackendAPI.Services.DataService
             {
                 return null;
             }
-            Console.WriteLine($"Key: {pair.Key}, Value: {pair.Value}");
+            
             _onlineWorkers.TryRemove(pair.Key, out string? result);
 
             List<KeyValuePair<string, WorkerChat>> chatRooms = _chatsBetweenWorkers

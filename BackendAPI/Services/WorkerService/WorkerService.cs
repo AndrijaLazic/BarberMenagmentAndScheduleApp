@@ -190,5 +190,19 @@ namespace BackendAPI.Services.WorkerService
             response.Data = communication;
             return response;
         }
+
+        public async Task<ServiceResponse<int>> PostMessage(string Message,int SenderID)
+        {
+            ServiceResponse<int> response = new ServiceResponse<int>();
+            WorkerMessage workerMessage = new WorkerMessage
+            {
+                Message = Message,
+                SenderID = SenderID
+            };
+            _databaseContext.WorkerMessages.Add(workerMessage);
+            _databaseContext.SaveChanges();
+            response.Data = workerMessage.CommunicationId;
+            return response;
+        }
     }
 }

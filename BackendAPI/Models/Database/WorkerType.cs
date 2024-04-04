@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BackendAPI.Models.Database
+namespace BackendAPI.Models
 {
     public partial class WorkerType
     {
@@ -10,8 +10,8 @@ namespace BackendAPI.Models.Database
             Workers = new HashSet<Worker>();
         }
 
-        public string WorkerType1 { get; set; } = null!;
         public int Id { get; set; }
+        public string WorkerType1 { get; set; } = null!;
 
         public virtual ICollection<Worker> Workers { get; set; }
     }

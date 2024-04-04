@@ -12,17 +12,17 @@ export class SignalRService {
 
 	constructor () { }
 
-	public startConnection = async () => {
+	public startConnection = async (JWT:string) => {
 		this.hubConnection = new signalR.HubConnectionBuilder()
 			.withUrl(environment.SOCKET_URL, {
 				skipNegotiation: true,
 				transport: signalR.HttpTransportType.WebSockets,
-				withCredentials: false
+				withCredentials: false,
+				Headers:{"JWT":JWT}
 			})
 			.configureLogging(signalR.LogLevel.Information)
 			.build();
-		
-		
+
 		return this.hubConnection.start()
 			.then(() => {
 				console.log('Connection started');
@@ -33,8 +33,6 @@ export class SignalRService {
 				console.log('Error while starting connection: ' + err);
 				return false;
 			});
-		
-	
 	};
 
 	private setSignalrClientMethods (): void {
@@ -48,6 +46,6 @@ export class SignalRService {
 			'JoinChatWithUser', userId1, userId2
 		);
 	};
-	
-  
+
+
 }
