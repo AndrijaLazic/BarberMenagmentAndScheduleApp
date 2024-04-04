@@ -9,9 +9,11 @@ import { AppRoutingModule } from './app/app-routing.module';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 
 bootstrapApplication(AppComponent, {
-    providers: [
-        importProvidersFrom(BrowserModule, AppRoutingModule, NgToastModule),
-        provideHttpClient(withInterceptorsFromDi())
-    ]
+	providers: [
+		importProvidersFrom(
+			BrowserModule, AppRoutingModule, NgToastModule
+		),
+		provideHttpClient(withInterceptorsFromDi())
+	]
 })
 	.catch((err) => console.error(err));

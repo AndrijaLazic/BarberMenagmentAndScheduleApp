@@ -1,20 +1,18 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { RegisterDTS } from '../models/RegisterDTS';
 import { environment } from 'src/environments/environment';
-import { LoginDTS } from '../models/LoginDTS';
-import { GlobalStateService } from './global-state.service';
+import { IAuthSerice } from '../IAuthService';
+import { Observable } from 'rxjs';
+import { RegisterWorkerDTS } from '../../models/admin/RegisterWorkerDTS';
+import { HttpClient } from '@angular/common/http';
+import { GlobalStateService } from '../global-state.service';
+import { LoginDTS } from '../../models/LoginDTS';
 import { jwtDecode } from 'jwt-decode';
-import { IAuthSerice } from './IAuthService';
 
 @Injectable({
 	providedIn: 'root'
 })
-export class AuthService implements IAuthSerice{
-
-	baseUrl=environment.BACK_END_URL+"Authentication/";
-
+export class AdminAuthService implements IAuthSerice {
+	baseUrl=environment.BACK_END_URL+"Workers/";
 	constructor (private http: HttpClient, private globalState:GlobalStateService) {
 		if(this.isLoggedIn()){
 			globalState.setLogginState(true);
@@ -25,7 +23,9 @@ export class AuthService implements IAuthSerice{
 		globalState.setLogginState(false);
 	}
 
-	register (body: RegisterDTS):Observable<any> {
+
+
+	register (body: RegisterWorkerDTS):Observable<any> {
 		return this.http.post(this.baseUrl+'Register', body);
 	}
 
@@ -55,5 +55,4 @@ export class AuthService implements IAuthSerice{
 		this.globalState.setLogginState(false);
 		this.globalState.setUserData(null);
 	}
-
 }

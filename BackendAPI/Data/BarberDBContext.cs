@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BackendAPI.Models;
+using BackendAPI.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

@@ -1,10 +1,10 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import { LoginDTS } from 'src/app/shared/models/LoginDTS';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { IAuthSerice } from 'src/app/shared/services/IAuthService';
 import { SignalRService } from 'src/app/shared/services/signal-r.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class LoginPageComponent {
 
 	constructor (
 		private formBuilder: FormBuilder,
-		private service: AuthService,
+		@Inject('IAuthService') private service: IAuthSerice,
 		private router: Router,
 		private toast: NgToastService,
 		private signalR: SignalRService
@@ -39,15 +39,6 @@ export class LoginPageComponent {
 			email: [ this.loginDTS.email, [ Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}') ] ],
 			password: [ this.loginDTS.password, [ Validators.required, Validators.pattern('.{3,20}') ] ]
 		});
-
-		
-		this.signalR.startConnection().then((value)=>{
-			console.log(value);
-			if(value === true){
-				this.signalR.JoinChatWithUser(1, 2);
-			}
-		});
-
 	}
 
 
