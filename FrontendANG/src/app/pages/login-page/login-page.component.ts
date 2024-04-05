@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import { LoginDTS } from 'src/app/shared/models/LoginDTS';
 import { IAuthSerice } from 'src/app/shared/services/IAuthService';
-import { SignalRService } from 'src/app/shared/services/signal-r.service';
 
 @Component({
 	selector: 'app-login-page',

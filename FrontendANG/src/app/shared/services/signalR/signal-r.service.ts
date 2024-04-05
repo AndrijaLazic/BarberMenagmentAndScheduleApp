@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
 import { environment } from 'src/environments/environment';
+import { GlobalStateService } from '../global-state.service';
+import { NgToastService } from 'ng-angular-popup';
 
 
 @Injectable({
@@ -10,7 +12,7 @@ export class SignalRService {
 
 	private hubConnection!: signalR.HubConnection;
 
-	constructor () { }
+	constructor (public globalService:GlobalStateService, private toast: NgToastService) { }
 
 	public startConnection = async (JWT:string) => {
 		this.hubConnection = new signalR.HubConnectionBuilder()
@@ -38,6 +40,15 @@ export class SignalRService {
 	private setSignalrClientMethods (): void {
 		this.hubConnection.on('JoinedMessage', (message:any)=>{
 			console.log(message);
+			this.toast.success(message);
+		});
+		this.hubConnection.on('ReceiveSpecificMessage', (message:any)=>{
+			console.log(message);
+			this.globalService.setUnreadMessagesNumber(this.globalService.unreadMessagesNumber()+1);
+		});
+		this.hubConnection.on('ValidationError', (message:any)=>{
+			console.log(message);
+			this.toast.error(message);
 		});
 	}
 

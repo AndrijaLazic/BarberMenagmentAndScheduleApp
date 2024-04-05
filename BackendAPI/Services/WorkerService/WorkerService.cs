@@ -107,6 +107,7 @@ namespace BackendAPI.Services.WorkerService
                 new Claim("Email",user.Email),
                 new Claim("Name",user.Name),
                 new Claim("LastName",user.LastName),
+                new Claim("WorkerTypeId",user.LastName),
                 new Claim("Id",user.Id.ToString())
             };
 

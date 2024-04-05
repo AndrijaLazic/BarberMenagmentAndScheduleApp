@@ -34,15 +34,16 @@
 						aria-expanded="false"
 					>
 						<i class="bi bi-person-circle"></i>
-						<span *ngIf="!isLoggedIn()" style="margin-left: 10px"
-							>Nalog</span
-						>
-						<span *ngIf="isLoggedIn()" style="margin-left: 10px">{{
-							userData()?.Name
+						@if (!globalState.loggedInState()){
+						<span style="margin-left: 10px">Nalog</span>
+						} @else{
+						<span style="margin-left: 10px">{{
+							this.globalState.userName()
 						}}</span>
+						}
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<div *ngIf="!isLoggedIn()">
+						<div *ngIf="!globalState.loggedInState()">
 							<li>
 								<a class="dropdown-item" routerLink="/prijava"
 									>Prijava</a
@@ -54,13 +55,16 @@
 								>
 							</li>
 						</div>
-						<li *ngIf="isLoggedIn()">
+						<li *ngIf="globalState.loggedInState()">
+							@if(globalState.isWorker()){
 							<a
 								class="dropdown-item"
 								(click)="messages()"
 								routerLink="/poruke"
 								>Poruke</a
 							>
+							}
+
 							<a
 								class="dropdown-item"
 								(click)="logout()"

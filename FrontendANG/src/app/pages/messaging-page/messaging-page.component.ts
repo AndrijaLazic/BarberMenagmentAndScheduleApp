@@ -1,7 +1,7 @@
 import { CommonModule, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from 'src/app/shared/services/chat.service';
-import { SignalRService } from 'src/app/shared/services/signal-r.service';
+import { SignalRService } from 'src/app/shared/services/signalR/signal-r.service';
 
 @Component({
 	selector: 'app-messaging-page',
@@ -24,7 +24,7 @@ export class MessagingPageComponent implements OnInit{
 		this.chatService.getWorkers().subscribe((response:any)=>{
 			this.workers = response.data;
 		});
-		
+
 	}
 
 	showChat (id:number){
