@@ -1,5 +1,5 @@
 import { Injectable, WritableSignal, computed, signal } from '@angular/core';
-import { IUser, User, Worker } from '../models/UserData';
+import { IUser, Worker } from '../models/UserData';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,11 +11,11 @@ export class GlobalStateService {
 	userName=computed(()=>{
 		if(this.userData()==null)
 			return "";
-		if(this.userData() instanceof User){
-			return (this.userData() as User).Name!;
-		}
 		const work=this.userData() as Worker;
-		return work.Name!+" "+work.LastName;
+		if(work.LastName){
+			return work.Name!+" "+work.LastName;
+		}
+		return work.Name;
 	});
 
 	constructor () {
@@ -26,7 +26,6 @@ export class GlobalStateService {
 	}
 
 	setUserData (data:IUser | null){
-		console.log(data);
 		this.userData.set(data);
 	}
 
@@ -35,6 +34,8 @@ export class GlobalStateService {
 	}
 
 	isWorker ():boolean{
-		return this.userData() instanceof Worker;
+		if((this.userData() as Worker).WorkerTypeId)
+			return true;
+		return false;
 	}
 }
