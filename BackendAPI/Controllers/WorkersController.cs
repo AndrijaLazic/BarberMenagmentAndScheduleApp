@@ -90,9 +90,9 @@ namespace BackendAPI.Controllers
         [HttpGet("Workers")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<ServiceResponse<List<Worker>>>> GetWorkers()
+        public async Task<ActionResult<ServiceResponse<List<WorketDTO>>>> GetWorkers()
         {
-            ServiceResponse<List<Worker>> response = new ServiceResponse<List<Worker>>();
+            ServiceResponse<List<WorketDTO>> response = new ServiceResponse<List<WorketDTO>>();
             try
             {
                 response = await _workerService.GetWorkers();

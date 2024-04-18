@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml.Linq;
 
 namespace BackendAPI.Services.WorkerService
 {
@@ -70,12 +71,20 @@ namespace BackendAPI.Services.WorkerService
             return response;
         }
 
-        public async Task<ServiceResponse<List<Worker>>> GetWorkers()
+        public async Task<ServiceResponse<List<WorketDTO>>> GetWorkers()
         {
-            ServiceResponse<List<Worker>> response = new ServiceResponse<List<Worker>>();
+            ServiceResponse<List<WorketDTO>> response = new ServiceResponse<List<WorketDTO>>();
 
-            List<Worker> workers = new List<Worker>();
-            workers = _databaseContext.Workers.ToList();
+            List<WorketDTO> workers = new List<WorketDTO>();
+            workers = _databaseContext.Workers.Select(x => new WorketDTO(){
+                Id=x.Id,
+                Name=x.Name,
+                LastName = x.LastName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                WorkerTypeId = x.WorkerTypeId
+            }).ToList();
+            Console.WriteLine(workers[0].Id);
             response.Data = workers;
 
             return response;
@@ -103,12 +112,12 @@ namespace BackendAPI.Services.WorkerService
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim("PhoneNumber",user.PhoneNumber),
-                new Claim("Email",user.Email),
-                new Claim("Name",user.Name),
-                new Claim("LastName",user.LastName),
-                new Claim("WorkerTypeId",user.WorkerTypeId.ToString()),
-                new Claim("Id",user.Id.ToString())
+                new Claim("phoneNumber",user.PhoneNumber),
+                new Claim("email",user.Email),
+                new Claim("name",user.Name),
+                new Claim("lastName",user.LastName),
+                new Claim("workerTypeId",user.WorkerTypeId.ToString()),
+                new Claim("id",user.Id.ToString())
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

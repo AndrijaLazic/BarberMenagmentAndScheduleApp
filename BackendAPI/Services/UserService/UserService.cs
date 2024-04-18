@@ -76,10 +76,10 @@ namespace BackendAPI.Services.UserService
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim("PhoneNumber",user.PhoneNumber),
-                new Claim("Email",user.Email),
-                new Claim("Name",user.Name),
-                new Claim("Id",user.Name)
+                new Claim("phoneNumber",user.PhoneNumber),
+                new Claim("email",user.Email),
+                new Claim("name",user.Name),
+                new Claim("id",user.Name)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

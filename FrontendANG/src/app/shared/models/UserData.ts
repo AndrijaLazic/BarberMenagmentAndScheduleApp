@@ -3,19 +3,19 @@ export interface IUser {
 }
 
 export class User implements IUser{
-	PhoneNumber?: string;
-	Email?: string;
-	Name?: string;
+	phoneNumber?: string;
+	email?: string;
+	name?: string;
 	exp?: number;
 }
 
 export class Worker implements IUser {
-	PhoneNumber?: string;
-	Email?: string;
-	Name?: string;
-	LastName?: string;
-	WorkerTypeId?:WorkerType;
-	Id?:number;
+	phoneNumber?: string;
+	email?: string;
+	name?: string;
+	lastName?: string;
+	workerTypeId?:WorkerType;
+	id?:number;
 	exp?: number;
 }
 

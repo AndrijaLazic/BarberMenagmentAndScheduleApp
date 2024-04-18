@@ -45,6 +45,7 @@ export class SignalRService {
 		this.hubConnection.on('ReceiveSpecificMessage', (message:any)=>{
 			console.log(message);
 			this.globalService.setUnreadMessagesNumber(this.globalService.unreadMessagesNumber()+1);
+			this.toast.info({detail:"Imate "+this.globalService.unreadMessagesNumber()+" novih poruka", duration:2000});
 		});
 		this.hubConnection.on('ValidationError', (message:any)=>{
 			console.log(message);

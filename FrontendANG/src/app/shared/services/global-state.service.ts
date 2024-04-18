@@ -12,11 +12,15 @@ export class GlobalStateService {
 		if(this.userData()==null)
 			return "";
 		const work=this.userData() as Worker;
-		if(work.LastName){
-			return work.Name!+" "+work.LastName;
+		if(work.lastName){
+			return work.name!+" "+work.lastName;
 		}
-		return work.Name;
+		return work.name;
 	});
+
+	getWorkerData (){
+		return this.userData() as Worker;
+	}
 
 	constructor () {
 	}
@@ -34,7 +38,7 @@ export class GlobalStateService {
 	}
 
 	isWorker ():boolean{
-		if((this.userData() as Worker).WorkerTypeId)
+		if((this.userData() as Worker).workerTypeId)
 			return true;
 		return false;
 	}

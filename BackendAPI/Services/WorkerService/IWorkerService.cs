@@ -10,7 +10,7 @@ namespace BackendAPI.Services.WorkerService
         Task<ServiceResponse<bool>> RegisterWorker(WorkerRegistrationDTO registrationDTO);
         Task<ServiceResponse<string>> Login(LoginDTO loginDTO);
 
-        Task<ServiceResponse<List<Worker>>> GetWorkers();
+        Task<ServiceResponse<List<WorketDTO>>> GetWorkers();
 
         Task<ServiceResponse<List<WorkerMessage>>> GetChatMessages(int chatId);
 
