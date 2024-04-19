@@ -136,7 +136,6 @@ namespace BackendAPI.Services.WorkerService
 
         public static string? ValidateToken(string token)
         {
-            Console.WriteLine(token);
             if (token == null)
                 return null;
 
@@ -158,7 +157,7 @@ namespace BackendAPI.Services.WorkerService
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
 
-                var Id = (jwtToken.Claims.First(x => x.Type == "Id").Value);
+                var Id = (jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 return Id;
             }
@@ -180,10 +179,14 @@ namespace BackendAPI.Services.WorkerService
             return response;
         }
 
-        public async Task<ServiceResponse<List<WorkerMessage>>> GetChatMessages(int chatId)
+        public async Task<ServiceResponse<List<MessageDTO>>> GetChatMessages(int chatId)
         {
-            ServiceResponse<List<WorkerMessage>> response = new ServiceResponse<List<WorkerMessage>>();
-            response.Data = _databaseContext.WorkerMessages.Where(x => x.CommunicationId == chatId).ToList();
+            ServiceResponse<List<MessageDTO>> response = new ServiceResponse<List<MessageDTO>>();
+            response.Data = _databaseContext.WorkerMessages.Select(x=>new MessageDTO { 
+                CommunicationId=x.CommunicationId,
+                Id=x.Id,
+                SenderId=x.SenderId,
+                Message=x.Message}).Where(x => x.CommunicationId == chatId).ToList();
             return response;
         }
 

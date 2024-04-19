@@ -28,14 +28,10 @@ export class MessagingPageComponent implements OnInit{
 		this.chatService.getWorkers().subscribe((response:any)=>{
 			this.workers = response.data;
 			const userData=this.workers.find(x=> x.id==this.globalState.getWorkerData().id);
-			console.log(this.globalState.getWorkerData());
 			if(userData){
 				this.workers.splice(this.workers.indexOf(userData), 1);
-
 			}
-
 		});
-
 	}
 
 	showChat (id:number){

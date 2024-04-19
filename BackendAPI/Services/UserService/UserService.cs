@@ -96,6 +96,40 @@ namespace BackendAPI.Services.UserService
             return jwt;
         }
 
+        public static string? ValidateToken(string token)
+        {
+            if (token == null)
+                return null;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY")!);
+
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+
+                    ClockSkew = TimeSpan.Zero
+                },
+                out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+
+                var Id = (jwtToken.Claims.First(x => x.Type == "id").Value);
+
+                return Id;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
 
         private bool CheckIfUserExists(User newUser)
         {

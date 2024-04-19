@@ -12,7 +12,7 @@ namespace BackendAPI.Services.WorkerService
 
         Task<ServiceResponse<List<WorketDTO>>> GetWorkers();
 
-        Task<ServiceResponse<List<WorkerMessage>>> GetChatMessages(int chatId);
+        Task<ServiceResponse<List<MessageDTO>>> GetChatMessages(int chatId);
 
         Task<ServiceResponse<WorkerCommunication>> GetChat(int userId, int secondUserId);
 
