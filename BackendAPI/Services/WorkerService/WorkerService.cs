@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml.Linq;
 
 namespace BackendAPI.Services.WorkerService
 {
@@ -70,12 +71,20 @@ namespace BackendAPI.Services.WorkerService
             return response;
         }
 
-        public async Task<ServiceResponse<List<Worker>>> GetWorkers()
+        public async Task<ServiceResponse<List<WorketDTO>>> GetWorkers()
         {
-            ServiceResponse<List<Worker>> response = new ServiceResponse<List<Worker>>();
+            ServiceResponse<List<WorketDTO>> response = new ServiceResponse<List<WorketDTO>>();
 
-            List<Worker> workers = new List<Worker>();
-            workers = _databaseContext.Workers.ToList();
+            List<WorketDTO> workers = new List<WorketDTO>();
+            workers = _databaseContext.Workers.Select(x => new WorketDTO(){
+                Id=x.Id,
+                Name=x.Name,
+                LastName = x.LastName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                WorkerTypeId = x.WorkerTypeId
+            }).ToList();
+            Console.WriteLine(workers[0].Id);
             response.Data = workers;
 
             return response;
@@ -103,12 +112,12 @@ namespace BackendAPI.Services.WorkerService
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim("PhoneNumber",user.PhoneNumber),
-                new Claim("Email",user.Email),
-                new Claim("Name",user.Name),
-                new Claim("LastName",user.LastName),
-                new Claim("WorkerTypeId",user.LastName),
-                new Claim("Id",user.Id.ToString())
+                new Claim("phoneNumber",user.PhoneNumber),
+                new Claim("email",user.Email),
+                new Claim("name",user.Name),
+                new Claim("lastName",user.LastName),
+                new Claim("workerTypeId",user.WorkerTypeId.ToString()),
+                new Claim("id",user.Id.ToString())
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -127,7 +136,6 @@ namespace BackendAPI.Services.WorkerService
 
         public static string? ValidateToken(string token)
         {
-            Console.WriteLine(token);
             if (token == null)
                 return null;
 
@@ -149,7 +157,7 @@ namespace BackendAPI.Services.WorkerService
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
 
-                var Id = (jwtToken.Claims.First(x => x.Type == "Id").Value);
+                var Id = (jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 return Id;
             }
@@ -171,10 +179,14 @@ namespace BackendAPI.Services.WorkerService
             return response;
         }
 
-        public async Task<ServiceResponse<List<WorkerMessage>>> GetChatMessages(int chatId)
+        public async Task<ServiceResponse<List<MessageDTO>>> GetChatMessages(int chatId)
         {
-            ServiceResponse<List<WorkerMessage>> response = new ServiceResponse<List<WorkerMessage>>();
-            response.Data = _databaseContext.WorkerMessages.Where(x => x.CommunicationId == chatId).ToList();
+            ServiceResponse<List<MessageDTO>> response = new ServiceResponse<List<MessageDTO>>();
+            response.Data = _databaseContext.WorkerMessages.Select(x=>new MessageDTO { 
+                CommunicationId=x.CommunicationId,
+                Id=x.Id,
+                SenderId=x.SenderId,
+                Message=x.Message}).Where(x => x.CommunicationId == chatId).ToList();
             return response;
         }
 

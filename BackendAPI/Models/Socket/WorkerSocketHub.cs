@@ -36,27 +36,13 @@ namespace BackendAPI.Models.Socket
         }
 
         /// <summary>
-        ///     Join a server to receive notifications
+        ///     Join a server to receive notifications. You need to send valid JWT
         /// </summary>
         /// <param name="JWT">Your valid JWT</param>
         /// <returns></returns>
-        public async Task JoinServer()
+        public async Task JoinServer(string JWT)
         {
-            // Access the HTTP context
-            HttpContext? httpContext = Context.GetHttpContext();
-
-            string JWT = "";
-            if (httpContext == null)
-            {
-                await Clients.Caller.ValidationError("InvalidJWT");
-                return;
-            }
-            if (!httpContext!.Request.Headers.TryGetValue("JWT", out StringValues header))
-            {
-                await Clients.Caller.ValidationError("InvalidJWT");
-                return;
-            }
-
+      
             string ?userId=WorkerService.ValidateToken(JWT);
 
             if(userId == null)
@@ -64,6 +50,8 @@ namespace BackendAPI.Models.Socket
                 await Clients.Caller.ValidationError("InvalidJWT");
                 return;
             }
+            Context.Items["JWTtoken"] = JWT;
+          
 
             _sharedDb.setWorkerOnline(userId, Context.ConnectionId);
             await Clients.All.JoinedServerMessage(userId);
@@ -78,21 +66,16 @@ namespace BackendAPI.Models.Socket
         /// <returns></returns>
         public async Task JoinChatWithUser(int user1Id, int user2Id)
         {
-            // Access the HTTP context
-            HttpContext ?httpContext = Context.GetHttpContext();
 
-            string JWT="";
-            if (httpContext == null)
+
+            string JWT = "";
+            if (Context.Items["JWTtoken"] != null)
+                JWT = Context.Items["JWTtoken"]!.ToString()!;
+            if (JWT == "")
             {
                 await Clients.Caller.ValidationError("InvalidJWT");
                 return;
             }
-            if (!httpContext!.Request.Headers.TryGetValue("JWT", out StringValues header))
-            {
-                await Clients.Caller.ValidationError("InvalidJWT");
-                return;
-            }
-            JWT = header.ToString();
 
             string? userId = WorkerService.ValidateToken(JWT);
             if (userId == null)
@@ -132,21 +115,14 @@ namespace BackendAPI.Models.Socket
 
         public async Task SendMessage(int user2Id, string message)
         {
-            // Access the HTTP context
-            HttpContext? httpContext = Context.GetHttpContext();
-
             string JWT = "";
-            if (httpContext == null)
+            if (Context.Items["JWTtoken"] != null)
+                JWT = Context.Items["JWTtoken"]!.ToString()!;
+            if (JWT == "")
             {
                 await Clients.Caller.ValidationError("InvalidJWT");
                 return;
             }
-            if (!httpContext!.Request.Headers.TryGetValue("JWT", out StringValues header))
-            {
-                await Clients.Caller.ValidationError("InvalidJWT");
-                return;
-            }
-            JWT = header.ToString();
 
             string? userId = WorkerService.ValidateToken(JWT);
             if (userId == null)

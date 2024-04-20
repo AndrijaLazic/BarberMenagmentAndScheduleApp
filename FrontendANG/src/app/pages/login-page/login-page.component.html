@@ -54,7 +54,12 @@
 					</div>
 				</div>
 			</div>
-			<button type="submit" [disabled]="myForm.invalid" class="btn">
+			<button
+				type="submit"
+				[disabled]="myForm.invalid"
+				class="btn"
+				(keydown.enter)="onSubmit()"
+			>
 				Prijavi me
 			</button>
 		</form>

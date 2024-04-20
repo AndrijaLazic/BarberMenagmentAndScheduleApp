@@ -90,9 +90,9 @@ namespace BackendAPI.Controllers
         [HttpGet("Workers")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<ServiceResponse<List<Worker>>>> GetWorkers()
+        public async Task<ActionResult<ServiceResponse<List<WorketDTO>>>> GetWorkers()
         {
-            ServiceResponse<List<Worker>> response = new ServiceResponse<List<Worker>>();
+            ServiceResponse<List<WorketDTO>> response = new ServiceResponse<List<WorketDTO>>();
             try
             {
                 response = await _workerService.GetWorkers();
@@ -110,9 +110,9 @@ namespace BackendAPI.Controllers
         [HttpGet("WorkerChat")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<ServiceResponse<List<WorkerMessage>>>> GetWorkerChat(string secondUserId, [FromHeader]string JWT)
+        public async Task<ActionResult<ServiceResponse<List<MessageDTO>>>> GetWorkerChat(string secondUserId, [FromHeader]string JWT)
         {
-            ServiceResponse<List<WorkerMessage>> response = new ServiceResponse<List<WorkerMessage>>();
+            ServiceResponse<List<MessageDTO>> response = new ServiceResponse<List<MessageDTO>>();
             ServiceResponse<WorkerCommunication> chatResponse;
             
             string ?id = WorkerService.ValidateToken(JWT);

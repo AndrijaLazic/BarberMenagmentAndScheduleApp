@@ -23,7 +23,13 @@ export class NavigationBarComponent {
 
 
 	logout (){
+		const isWorker:boolean=this.globalState.isWorker();
 		this.authService.logout();
+		console.log(isWorker);
+		if(isWorker){
+			this.router.navigate([ "/admin/prijava" ]);
+			return;
+		}
 		this.router.navigate([ "/prijava" ]);
 	}
 
