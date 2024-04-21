@@ -53,6 +53,7 @@ namespace BLL.Services.DataService
 
         public async Task<ServiceResponse<string>> Login(LoginDTO loginDTO)
         {
+            Console.WriteLine(_options.Value.JWTduration);
             ServiceResponse<string> response = new ServiceResponse<string>();
 
             var user = _databaseContext.Workers.Where(x => x.Email.Equals(loginDTO.Email)).FirstOrDefault();

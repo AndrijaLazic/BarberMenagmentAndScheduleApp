@@ -19,4 +19,9 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DatabaseWrites\" />
+    <Folder Include="DatabaseReads\" />
+  </ItemGroup>
+
 </Project>

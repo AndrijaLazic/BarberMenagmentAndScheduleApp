@@ -4,6 +4,7 @@ using BLL.Services;
 using BLL.Services.DataService;
 using BLL.Services.Socket;
 using DAL.Data;
+using Domain;
 
 
 
@@ -12,23 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<AppConfiguration>(builder.Configuration.GetSection("settings"));
 
-// Add services to the container.
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IWorkerService, WorkerService>();
-
-
-// Socket
-builder.Services.AddSignalR(options =>
-{
-    options.EnableDetailedErrors = true;
-});
-builder.Services.AddSingleton<SharedDB>();
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<BarberDBContext>();
+builder.Services.AddServices(builder.Configuration);
 
 // Enable CORS
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
