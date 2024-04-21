@@ -19,16 +19,20 @@ export class SignalRService {
 			.withUrl(environment.SOCKET_URL, {
 				skipNegotiation: true,
 				transport: signalR.HttpTransportType.WebSockets,
-				withCredentials: false,
-				headers:{"JWT":JWT}
+				withCredentials: false
 			})
 			.configureLogging(signalR.LogLevel.Information)
 			.build();
 
 		return this.hubConnection.start()
-			.then(() => {
+			.then(async () => {
 				console.log('Connection started');
 				this.setSignalrClientMethods();
+				this.JoinServer(JWT).then(x=>{
+					console.log(x);
+				}).catch(err=> {
+					console.log(err);
+				});
 				return true;
 			})
 			.catch(err => {
@@ -40,7 +44,6 @@ export class SignalRService {
 	private setSignalrClientMethods (): void {
 		this.hubConnection.on('JoinedMessage', (message:any)=>{
 			console.log(message);
-			this.toast.success(message);
 		});
 		this.hubConnection.on('ReceiveSpecificMessage', (message:any)=>{
 			console.log(message);
@@ -49,15 +52,24 @@ export class SignalRService {
 		});
 		this.hubConnection.on('ValidationError', (message:any)=>{
 			console.log(message);
-			this.toast.error(message);
+			this.toast.error({detail:message, duration:2000});
 		});
 	}
 
+	public async JoinServer (JWT:string){
+		return this.hubConnection.invoke("JoinServer", JWT);
+	}
+
 	public JoinChatWithUser = async (userId1: number, userId2: number) => {
-		await this.hubConnection.invoke(
+		return this.hubConnection.invoke(
 			'JoinChatWithUser', userId1, userId2
 		);
 	};
 
+	public SendMessage = async (userId1: number, userId2: number) => {
+		return this.hubConnection.invoke(
+			'JoinChatWithUser', userId1 as number, userId2 as number
+		);
+	};
 
 }

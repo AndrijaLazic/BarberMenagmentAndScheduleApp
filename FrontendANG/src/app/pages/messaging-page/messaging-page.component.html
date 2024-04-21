@@ -30,19 +30,18 @@
 				<div class="card-header">Trenutni čet - <u>Nikola</u></div>
 				<div class="card-body messages" id="current-chat-messages">
 					<!-- Messages of the currently clicked chat -->
-					<div class="card message self align-self-start flex-grow-0">
-						<span>Cao</span>
-						<span className="message-footer">30.03.2024</span>
-					</div>
+					@for (message of currentChat; track message){
+					@if(message.senderId===globalState.getWorkerData().id){
 					<div class="card message align-self-end flex-grow-0">
-						<span>Cao Nikola</span>
-						<span className="message-footer">30.03.2024</span>
+						<span>{{ message.message }}</span>
+						<!-- <span className="message-footer">30.03.2024</span> -->
 					</div>
+					} @else {
 					<div class="card message self align-self-start flex-grow-0">
-						<span>Kako si ?</span>
-						<span className="message-footer">30.03.2024</span>
+						<span>{{ message.message }}</span>
+						<!-- <span className="message-footer">30.03.2024</span> -->
 					</div>
-					<!-- <b>Klikni na neki čet da bi video poruke</b> -->
+					} }
 				</div>
 				<div class="card-footer">
 					<div class="input-group">
@@ -50,9 +49,14 @@
 							type="text"
 							class="form-control"
 							placeholder="Unesi poruku..."
+							[(ngModel)]="messageText"
 						/>
 						<div class="input-group-append">
-							<button class="btn btn-primary" type="button">
+							<button
+								class="btn btn-primary"
+								type="button"
+								(click)="sendMessage()"
+							>
 								Pošalji
 							</button>
 						</div>

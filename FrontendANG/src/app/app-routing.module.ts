@@ -19,6 +19,7 @@ const routes: Routes = [
 		{ path: 'panel', component: AdminPageComponent},
 		{ path: '', redirectTo:"prijava", pathMatch:"full" },
 	] },
+
 ];
 
 @NgModule({

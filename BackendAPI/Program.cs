@@ -17,7 +17,10 @@ builder.Services.AddScoped<IWorkerService, WorkerService>();
 
 
 // Socket
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+});
 builder.Services.AddSingleton<SharedDB>();
 
 builder.Services.AddControllers();
@@ -30,7 +33,6 @@ builder.Services.AddDbContext<BarberDBContext>();
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    Console.WriteLine(options);
     options.AddPolicy(name: myAllowSpecificOrigins,
         builder =>
         {
