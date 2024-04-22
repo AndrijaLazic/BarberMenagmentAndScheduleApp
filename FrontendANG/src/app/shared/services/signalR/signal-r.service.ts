@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, WritableSignal, signal } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
 import { environment } from 'src/environments/environment';
 import { GlobalStateService } from '../global-state.service';
 import { NgToastService } from 'ng-angular-popup';
+import { Worker } from '../../models/UserData';
+import { CurrentChat } from '../../models/signalR/CurrentChat';
 
 
 @Injectable({
@@ -13,6 +15,9 @@ export class SignalRService {
 	private hubConnection!: signalR.HubConnection;
 
 	constructor (public globalService:GlobalStateService, private toast: NgToastService) { }
+
+	workers:WritableSignal<Worker[]>=signal([]);
+	currentChat:WritableSignal<CurrentChat | null>=signal(null);
 
 	public startConnection = async (JWT:string) => {
 		this.hubConnection = new signalR.HubConnectionBuilder()
@@ -45,8 +50,21 @@ export class SignalRService {
 		this.hubConnection.on('JoinedMessage', (message:any)=>{
 			console.log(message);
 		});
-		this.hubConnection.on('ReceiveSpecificMessage', (message:any)=>{
-			console.log(message);
+		this.hubConnection.on('ReceiveSpecificMessage', (sender:any, message:any)=>{
+			console.log(sender+" "+this.currentChat()?.id);
+			if(sender==this.currentChat()?.id || sender==this.globalService.getWorkerData().id){
+				this.currentChat.update(currentValue=>{
+					currentValue?.messages.push({
+						id:-1,
+						message:message,
+						senderId:sender,
+						communicationId:currentValue.id
+					});
+					return currentValue;
+				});
+				return;
+			}
+
 			this.globalService.setUnreadMessagesNumber(this.globalService.unreadMessagesNumber()+1);
 			this.toast.info({detail:"Imate "+this.globalService.unreadMessagesNumber()+" novih poruka", duration:2000});
 		});
@@ -66,9 +84,9 @@ export class SignalRService {
 		);
 	};
 
-	public SendMessage = async (userId1: number, userId2: number) => {
+	public SendMessage = async (userId2: number, message:string) => {
 		return this.hubConnection.invoke(
-			'JoinChatWithUser', userId1 as number, userId2 as number
+			'SendMessage', userId2, message
 		);
 	};
 

@@ -1,8 +1,7 @@
 import { CommonModule, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Worker } from 'src/app/shared/models/UserData';
-import { SingleMessage } from 'src/app/shared/models/signalR/singleMessage';
+import { CurrentChat } from 'src/app/shared/models/signalR/CurrentChat';
 import { ChatService } from 'src/app/shared/services/chat.service';
 import { GlobalStateService } from 'src/app/shared/services/global-state.service';
 import { SignalRService } from 'src/app/shared/services/signalR/signal-r.service';
@@ -17,12 +16,10 @@ import { SignalRService } from 'src/app/shared/services/signalR/signal-r.service
 export class MessagingPageComponent implements OnInit{
 
 	constructor (
-		private signalR: SignalRService, private chatService: ChatService, public globalState:GlobalStateService
+		public signalR: SignalRService, private chatService: ChatService, public globalState:GlobalStateService
 	){}
 
-	workers: Worker[] = [];
-
-	currentChat: SingleMessage[]=[];
+	currentChatId=-1;
 
 	messageText="";
 
@@ -30,17 +27,22 @@ export class MessagingPageComponent implements OnInit{
 		this.signalR.startConnection(localStorage.getItem("JWT")!);
 
 		this.chatService.getWorkers().subscribe((response:any)=>{
-			this.workers = response.data;
-			const userData=this.workers.find(x=> x.id==this.globalState.getWorkerData().id);
+			this.signalR.workers.set(response.data);
+			const userData=this.signalR.workers().find(x=> x.id==this.globalState.getWorkerData().id);
 			if(userData){
-				this.workers.splice(this.workers.indexOf(userData), 1);
+				this.signalR.workers().splice(this.signalR.workers().indexOf(userData), 1);
 			}
 		});
 	}
 
 	showChat (id:number){
 		this.chatService.getWorkerChat(id).subscribe((response:any)=>{
-			this.currentChat = response.data;
+			const newChat=new CurrentChat();
+			newChat.id=id;
+			newChat.messages=response.data;
+			this.signalR.currentChat.set(newChat);
+			this.currentChatId=id;
+			console.log(this.signalR.currentChat());
 			this.signalR.JoinChatWithUser(+this.globalState.getWorkerData().id!, id)
 				.then((x)=>{
 					console.log(x);
@@ -53,9 +55,8 @@ export class MessagingPageComponent implements OnInit{
 
 
 	sendMessage (){
-		console.log(this.messageText);
-
-
-		this.messageText="";
+		this.signalR.SendMessage(this.currentChatId, this.messageText).then(()=>{
+			this.messageText="";
+		});
 	}
 }

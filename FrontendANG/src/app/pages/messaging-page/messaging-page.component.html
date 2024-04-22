@@ -14,7 +14,7 @@
 						<li
 							class="list-group-item single-user-chat"
 							(click)="showChat(worker.id!)"
-							*ngFor="let worker of workers"
+							*ngFor="let worker of signalR.workers()"
 						>
 							<i class="bi bi-person-circle"></i>
 							{{ worker.name }}
@@ -30,8 +30,8 @@
 				<div class="card-header">Trenutni čet - <u>Nikola</u></div>
 				<div class="card-body messages" id="current-chat-messages">
 					<!-- Messages of the currently clicked chat -->
-					@for (message of currentChat; track message){
-					@if(message.senderId===globalState.getWorkerData().id){
+					@for (message of signalR.currentChat()?.messages; track message){
+					@if(message.senderId===(+globalState.getWorkerData().id!)){
 					<div class="card message align-self-end flex-grow-0">
 						<span>{{ message.message }}</span>
 						<!-- <span className="message-footer">30.03.2024</span> -->
