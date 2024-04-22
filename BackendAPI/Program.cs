@@ -1,10 +1,8 @@
 using BackendAPI;
-using BackendAPI.Data;
+using BackendAPI.Configuration;
 using BackendAPI.Models.Socket;
-using BackendAPI.Services.DataService;
-using BackendAPI.Services.UserService;
-using BackendAPI.Services.WorkerService;
-using Microsoft.EntityFrameworkCore;
+
+
 
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
