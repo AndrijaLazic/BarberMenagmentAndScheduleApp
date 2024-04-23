@@ -1,9 +1,6 @@
-﻿
-
-using BackendAPI.Data;
-using BackendAPI.Services.DataService;
-using BackendAPI.Services.UserService;
-using BackendAPI.Services.WorkerService;
+﻿using BLL.Services;
+using BLL.Services.DataService;
+using DAL.Data;
 
 namespace BackendAPI.Configuration
 {

@@ -1,8 +1,6 @@
-﻿using BackendAPI.Data;
-using BackendAPI.Models;
-using BackendAPI.Models.Database;
-using BackendAPI.Models.DTO;
-using BackendAPI.Services.UserService;
+﻿using BLL.Services;
+using Domain.Models;
+using Domain.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

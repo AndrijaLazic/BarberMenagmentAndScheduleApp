@@ -1,13 +1,13 @@
-﻿using BackendAPI.Models.Database;
-using BackendAPI.Models.DTO;
-using BackendAPI.Models;
-using BackendAPI.Services.UserService;
-using BackendAPI.Services.WorkerService;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Domain.Models;
+using Domain.Models.DTO;
+using Domain.Models.Database;
+using BLL.Services;
+using BLL.Services.DataService;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
