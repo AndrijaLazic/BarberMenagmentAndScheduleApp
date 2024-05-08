@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -53,6 +54,22 @@ export class LoginPageComponent {
 
 	onSubmit (){
 		this.service.login(this.myForm.value).subscribe({
+			error: (error) => {
+				const errorObject=error.error;
+				switch(errorObject.message){
+					case "EmailDoesNotExist": {
+						this.showError("Dati email ne postoji");
+						break;
+					}
+					case "PasswordNotValid": {
+						this.showError("Sifra nije validna");
+						break;
+					}
+					default: {
+						throw new Error(error);
+					}
+				}
+			},
 			next: async (response) => {
 				this.showSuccess("Dobrodosli!");
 				this.service.setLogin(response.data);
