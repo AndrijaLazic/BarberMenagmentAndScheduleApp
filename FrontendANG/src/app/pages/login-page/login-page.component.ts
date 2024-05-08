@@ -53,7 +53,6 @@ export class LoginPageComponent {
 
 	onSubmit (){
 		this.service.login(this.myForm.value).subscribe({
-			error: () => {this.showError("Doslo je do greske.");},
 			next: async (response) => {
 				this.showSuccess("Dobrodosli!");
 				this.service.setLogin(response.data);

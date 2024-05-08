@@ -33,9 +33,7 @@ export class SignalRService {
 			.then(async () => {
 				console.log('Connection started');
 				this.setSignalrClientMethods();
-				this.JoinServer(JWT).then(x=>{
-					console.log(x);
-				}).catch(err=> {
+				this.JoinServer(JWT).catch(err=> {
 					console.log(err);
 				});
 				return true;
@@ -71,6 +69,9 @@ export class SignalRService {
 		this.hubConnection.on('ValidationError', (message:any)=>{
 			console.log(message);
 			this.toast.error({detail:message, duration:2000});
+		});
+		this.hubConnection.on("JoinedServerMessage", (message:any)=>{
+			console.log("User is now online:"+ message);
 		});
 	}
 
