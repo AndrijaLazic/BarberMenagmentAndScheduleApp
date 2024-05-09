@@ -52,6 +52,7 @@ export class AuthService implements IAuthSerice{
 	logout (){
 		localStorage.removeItem("JWT");
 		localStorage.removeItem("User");
+
 		this.globalState.setLogginState(false);
 		this.globalState.setUserData(null);
 	}

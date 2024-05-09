@@ -1,6 +1,7 @@
+import { Worker } from "../UserData";
 import { SingleMessage } from "./singleMessage";
 
 export class CurrentChat{
-	id: number=0;//other users id
+	user:Worker | null=null;
 	messages:SingleMessage[]=[];
 }

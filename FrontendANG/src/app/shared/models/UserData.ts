@@ -1,8 +1,9 @@
 export interface IUser {
-
+	isOnline:boolean;
 }
 
 export class User implements IUser{
+	isOnline: boolean=false;
 	phoneNumber?: string;
 	email?: string;
 	name?: string;
@@ -10,6 +11,7 @@ export class User implements IUser{
 }
 
 export class Worker implements IUser {
+	isOnline: boolean=false;
 	phoneNumber?: string;
 	email?: string;
 	name?: string;

@@ -49,14 +49,14 @@ export class SignalRService {
 			console.log(message);
 		});
 		this.hubConnection.on('ReceiveSpecificMessage', (sender:any, message:any)=>{
-			console.log(sender+" "+this.currentChat()?.id);
-			if(sender==this.currentChat()?.id || sender==this.globalService.getWorkerData().id){
+			console.log(sender+" "+this.currentChat()?.user?.id);
+			if(sender==this.currentChat()?.user?.id || sender==this.globalService.getWorkerData().id){
 				this.currentChat.update(currentValue=>{
 					currentValue?.messages.push({
 						id:-1,
 						message:message,
 						senderId:sender,
-						communicationId:currentValue.id
+						communicationId:currentValue.user!.id!
 					});
 					return currentValue;
 				});
@@ -71,8 +71,19 @@ export class SignalRService {
 			this.toast.error({detail:message, duration:2000});
 		});
 		this.hubConnection.on("JoinedServerMessage", (message:any)=>{
-			console.log("User is now online:"+ message);
+			const userWithID=this.workers().find((x)=>x.id==message);
+			if(userWithID){
+				userWithID.isOnline=true;
+			}
 		});
+		this.hubConnection.on("DisconnectedFromAppMessage", (message:any)=>{
+			const userWithID=this.workers().find((x)=>x.id==message);
+			if(userWithID){
+				userWithID.isOnline=false;
+			}
+		});
+
+
 	}
 
 	public async JoinServer (JWT:string){

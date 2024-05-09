@@ -1,6 +1,7 @@
 import { CommonModule, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Worker } from 'src/app/shared/models/UserData';
 import { CurrentChat } from 'src/app/shared/models/signalR/CurrentChat';
 import { ChatService } from 'src/app/shared/services/chat.service';
 import { GlobalStateService } from 'src/app/shared/services/global-state.service';
@@ -20,6 +21,7 @@ export class MessagingPageComponent implements OnInit{
 	){}
 
 	currentChatId=-1;
+	currentChatUser:Worker | null =null;
 
 	messageText="";
 
@@ -38,17 +40,19 @@ export class MessagingPageComponent implements OnInit{
 	showChat (id:number){
 		this.chatService.getWorkerChat(id).subscribe((response:any)=>{
 			const newChat=new CurrentChat();
-			newChat.id=id;
+			const userWithID= this.signalR.workers().find((x)=>x.id===id);
+			if(userWithID){
+				newChat.user= userWithID;
+			}
 			newChat.messages=response.data;
 			this.signalR.currentChat.set(newChat);
 			this.currentChatId=id;
-			console.log(this.signalR.currentChat());
 			this.signalR.JoinChatWithUser(+this.globalState.getWorkerData().id!, id)
-				.then((x)=>{
-					console.log(x);
-				})
-				.catch((error)=>{
-					console.log(error);
+				.then(()=>{
+					const currenChatMessagesElement = document.getElementById('current-chat-messages');
+					if(currenChatMessagesElement){
+						currenChatMessagesElement.scrollTop=currenChatMessagesElement.scrollHeight;
+					}
 				});
 		});
 	}

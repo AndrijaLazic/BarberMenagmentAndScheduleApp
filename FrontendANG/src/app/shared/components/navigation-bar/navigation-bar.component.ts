@@ -25,12 +25,15 @@ export class NavigationBarComponent {
 	logout (){
 		const isWorker:boolean=this.globalState.isWorker();
 		this.authService.logout();
-		console.log(isWorker);
 		if(isWorker){
-			this.router.navigate([ "/admin/prijava" ]);
+			this.router.navigate([ "/admin/prijava" ]).then(() => {
+				window.location.reload();
+			});
 			return;
 		}
-		this.router.navigate([ "/prijava" ]);
+		this.router.navigate([ "/prijava" ]).then(() => {
+			window.location.reload();
+		});
 	}
 
 	messages (){
