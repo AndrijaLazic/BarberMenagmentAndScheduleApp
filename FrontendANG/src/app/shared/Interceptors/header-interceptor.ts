@@ -12,7 +12,6 @@ export class globalHttpHeaderInterceptor implements HttpInterceptor{
 		const JWT=localStorage.getItem("JWT");
 		//before request
 		// eslint-disable-next-line function-paren-newline
-		console.warn(JWT);
 		if(JWT==null){
 			console.warn("No JWT provided");
 			return next.handle(req);

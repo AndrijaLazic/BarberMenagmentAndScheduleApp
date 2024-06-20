@@ -40,4 +40,8 @@ export class NavigationBarComponent {
 		this.router.navigate([ "/poruke" ]);
 	}
 
+	adminPanel (){
+		this.router.navigate([ "/admin/panel" ]);
+	}
+
 }

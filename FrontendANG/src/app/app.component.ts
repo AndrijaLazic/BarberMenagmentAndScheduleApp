@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 		NavigationBarComponent,
 		RouterOutlet,
 		NgToastModule,
-		FooterComponent
+		FooterComponent,
 	],
 })
 export class AppComponent {

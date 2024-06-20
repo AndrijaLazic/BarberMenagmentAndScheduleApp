@@ -7,6 +7,7 @@ import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { CustomErrorHandlerService } from './app/shared/services/custom-error-handler.service';
 import { globalHttpErrorHandlerInterceptor } from './app/shared/Interceptors/global-http-error-handler.interceptor';
 import { globalHttpHeaderInterceptor } from './app/shared/Interceptors/header-interceptor';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 bootstrapApplication(AppComponent, {
 	providers: [
@@ -27,7 +28,8 @@ bootstrapApplication(AppComponent, {
 			provide:HTTP_INTERCEPTORS,
 			useClass:globalHttpHeaderInterceptor,
 			multi : true
-		}
+		},
+		provideAnimationsAsync()
 	]
 })
 	.catch((err) => console.error(err));

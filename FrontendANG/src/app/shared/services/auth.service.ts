@@ -35,10 +35,14 @@ export class AuthService implements IAuthSerice{
 
 	isLoggedIn ():boolean{
 
-		if(localStorage.getItem("JWT")==null){
+		const jwt=localStorage.getItem("JWT");
+		if(jwt==null){
 			return false;
 		}
-
+		if(this.tokenExpired(jwt)){
+			this.logout();
+			return false;
+		}
 		return true;
 	}
 
@@ -57,4 +61,8 @@ export class AuthService implements IAuthSerice{
 		this.globalState.setUserData(null);
 	}
 
+	tokenExpired (token: string) {
+		const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+		return (Math.floor((new Date).getTime() / 1000)) >= expiry;
+	}
 }

@@ -16,7 +16,7 @@ const routes: Routes = [
 	{ path: 'poruke', component: MessagingPageComponent, canActivate:[ LoggedInGuard ] },
 	{ path: 'admin', children:[
 		{ path: 'prijava', component: LoginPageComponent, providers:[ {provide: 'IAuthService', useClass: AdminAuthService} ]},
-		{ path: 'panel', component: AdminPageComponent},
+		{ path: 'panel', component: AdminPageComponent, canActivate:[ LoggedInGuard ]},
 		{ path: '', redirectTo:"prijava", pathMatch:"full" },
 	] },
 
